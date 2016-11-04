@@ -3,10 +3,10 @@ const assert = require('chai').assert;
 
 describe('Player model', () => {
 
-  it('validates with name and team', done => {
+  it('validates with name and position', done => {
     const player = new Player({
       name: 'name',
-      team: 'team'
+      position: 'position'
     });
 
     player.validate(err => {
@@ -17,7 +17,7 @@ describe('Player model', () => {
 
   it('name is required', done => {
     const player = new Player();
-    player.team = 'Athletics';
+    player.position = 'OF';
 
     player.validate(err => {
       assert.isOk(err, 'name should have been required');
@@ -48,19 +48,5 @@ describe('Player model', () => {
       done();
     });
   });
-
-  it('team defaults to "Athletics"', done => {
-    const player = new Player({
-      name: 'Ryon Healy'
-    });
-
-    player.validate(err => {
-      assert.isNotOk(err);
-      assert.equal(player.team, 'Athletics');
-      done();
-    });
-  });
-
-
-
+ 
 });

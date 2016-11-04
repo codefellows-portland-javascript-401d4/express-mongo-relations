@@ -33,14 +33,14 @@ describe( 'player api', () => {
 
   const healy = {
     name: 'Ryon Healy',
-    team: 'Athletics',
+    position: '3B',
     homers: 13
   };
 
   //he will be used to prove homer leader sort at end
-  const bryant = {
+  const bryant =  {
     name: 'Kris Bryant',
-    team: 'Cubs',
+    position: '1B',
     homers: 39
   };
 
@@ -80,6 +80,17 @@ describe( 'player api', () => {
 			.catch( done );
   });
 
+
+
+
+
+
+
+
+
+
+	
+
   it( '/GET all after post', done => {
     request
 			.get( '/api/players' )
@@ -90,7 +101,7 @@ describe( 'player api', () => {
 			.catch( done );
   });
 
-  it( 'add a non-Athletics player', done => {
+  it( 'add an additional player', done => {
     request
 			.post( '/api/players' )
 			.send(bryant)
@@ -101,16 +112,16 @@ describe( 'player api', () => {
 			.catch( done );
   });
 
-  it( '/GET where team is Athletics', done => {
-    request
-			.get( '/api/players' )
-			.query({ team: 'Athletics' })
-			.then( res => {
-  assert.deepEqual( res.body, [ healy ] );
-  done();
-})
-			.catch( done );
-  });
+//   it( '/GET where team is Athletics', done => {
+//     request
+// 			.get( '/api/players' )
+// 			.query({ team: 'Athletics' })
+// 			.then( res => {
+//   assert.deepEqual( res.body, [ healy ] );
+//   done();
+// })
+// 			.catch( done );
+//   });
 
   it( '/GETs sorted homer leader after 2nd player (Bryant) with more HRs added earlier', done => {
     request
