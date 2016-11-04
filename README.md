@@ -1,30 +1,37 @@
 This is a simple express persistent file api that uses mongodb to store data.
 
 Content: 
-This database contains pacific northwest trees of the two main types, gymnosperms(non-flowering trees) and angiosperms(true flowering trees), as well as animals (carnivores, omnivores, and herbivores);
+This database contains lords and ladies and houses from westeros, the continent from Game of thrones.
 
 Directions:
-send all requests to the following fields:
-  Url: 'localhost:3200/api/trees' or 'localhost:3200/api/trees/gymnosperms' or 'localhost:3000/api/trees/angiosperms'
-  Url: 'localhost:3200/api/animals' or 'localhost:3200/api/animals/carnivores' or 'localhost:3000/api/animals/omnivores'
+send all requests to the following field:
+  Url: 'localhost:3600/api/westeros' 
+
 
 GET: see a list of entries
-    All trees in the database:                   Url: 'localhost:3200/api/trees'
-    All gymnosperms in the database:             Url: 'localhost:3200/api/trees/gymnosperms'
-    All angiosperms in the database:             Url: 'localhost:3200/api/trees/angiosperms'
-    
-GET by genus:
+    All lords and ladies in the database:       Url: 'localhost:3600/api/westeros/nobles'
+    All houses in the database:                 Url: 'localhost:3600/api/westeros/houses'
+    All lords in the data base:                 Url: 'localhost:3600/api/westeros/lords'
+    All ladies in the data base:                Url: 'localhost:3600/api/westeros/ladies'
+    All lords and ladies of a specific house    Url: 'localhost:3600/api/westeros/nobles/$house'
 
+you can also enter specific queries.  
+for example:   'localhost:3600/api/westeros/nobles&dead=true' would return all dead nobles.
+for example:   'localhost:3600/api/westeros/house&sigil=stag' would return house Baratheon.
+  
+  
+POST: add a noble to the database
 
-POST: add a tree to the database
+POST: a
     You can add a tree to the trees database and the program will sort it automatically 
    Example: {name: 'douglas fir', type: 'gymnosperm', genus: 'Pseudotsuga'}                 
    Post Url: 'localhost:3200/api/trees'
 
-DELETE: a tree or animal by id
-DELETE all:
+PUT: update an entry by id.
 
-extra function:
-      typing the url http://localhost:3200/api/trees/ecosystem will calculate the ecosystem based on the prevalence of douglas fir trees.
+DELETE: a noble or house by ID
 
+
+extra function: Fighting
+      typing the url 'localhost:3600/api/westeros/fight/house1&house2 will cause the two houses to battle.
 
