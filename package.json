@@ -1,0 +1,36 @@
+{
+  "name": "express-mongo-relations",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "pretest": "npm run lint",
+    "test": "MONGODB_URI=mongodb://localhost/todo-test mocha",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/willnickerson/express-mongo-resources.git"
+  },
+  "author": "Will Nickerson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/willnickerson/express-mongo-resources/issues"
+  },
+  "homepage": "https://github.com/willnickerson/express-mongo-resources#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.5",
+    "sander": "^0.5.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.9.1",
+    "mocha": "^3.1.2"
+  }
+}
