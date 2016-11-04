@@ -1,0 +1,36 @@
+{
+  "name": "express-mongo-relations",
+  "version": "1.0.0",
+  "description": "================================================== This app launches a local HTTP server which is backed by a persistent data store. The server responds to GET, POST, PUT and DELETE requests for resources '/teams' and '/players', with the domain being my fantasy football league. :football:",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "DEBUG=myapp.* nodemon server.js",
+    "test": "MONGODB_URI=mongodb://localhost/fantasy-test mocha",
+    "test:watch": "MONGODB_URI=mongodb://localhost/fantasy-test nodemon --exec mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DrewStock/express-mongo-relations.git"
+  },
+  "author": "@DrewStock",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DrewStock/express-mongo-relations/issues"
+  },
+  "homepage": "https://github.com/DrewStock/express-mongo-relations#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.9.1",
+    "mocha": "^3.1.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "debug": "^2.2.0",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.6"
+  }
+}
