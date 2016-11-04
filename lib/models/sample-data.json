@@ -1,0 +1,30 @@
+{
+    "name": "Kris Bryant",
+    "team": "Cubs",
+    "homers": 39
+}
+{
+    "name": "Khris Davis",
+    "team": "Athletics",
+    "homers": 42
+}
+{
+    "name": "Ryon Healy",
+    "team": "Athletics",
+    "homers": 13
+}
+{
+    "team": "Athletics",
+    "league": "American",
+    "wins": 69
+}
+{
+    "team": "Cubs",
+    "league": "National",
+    "wins": 103
+}
+{
+    "team": "Mariners",
+    "league": "American",
+    "wins": 86
+}
