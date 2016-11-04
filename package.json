@@ -1,0 +1,19 @@
+{
+  "name": "express-mongo-relations",
+  "version": "1.0.0",
+  "description": "Relationship database with mongo/Mongoose/express/node",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Waxhoya/express-mongo-relations.git"
+  },
+  "author": "Chris B and Albert R",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Waxhoya/express-mongo-relations/issues"
+  },
+  "homepage": "https://github.com/Waxhoya/express-mongo-relations#readme"
+}
