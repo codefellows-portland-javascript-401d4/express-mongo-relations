@@ -4,7 +4,11 @@
   "description": "Relationship database with mongo/Mongoose/express/node",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "eslint ./",
+    "test": "mocha ./test/",
+    "test:watch": "mocha ./test/ -w",
+    "start": "mocha ./test/ && nodemon server.js", 
+    "lint": "eslint ./"
   },
   "repository": {
     "type": "git",
@@ -23,7 +27,6 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "chai-http": "^3.0.0",
     "morgan": "^1.7.0",
     "nodemon": "^1.11.0"
   }
