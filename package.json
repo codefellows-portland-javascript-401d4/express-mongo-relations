@@ -1,0 +1,33 @@
+{
+  "name": "express-mongo-relations",
+  "version": "0.1.0",
+  "description": "Another Express-based http server which accepts only JSON resources, backed by MongoDB. RESTful and generally CRUDdy.",
+  "main": "server.js",
+  "scripts": {
+    "pretest": "eslint *.js",
+    "test": "MONGODB_URI=mongodb://localhost/portland mocha --timeout 5000",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GloriaAnholt/express-mongo-relations.git"
+  },
+  "author": "Gloria Anholt",
+  "license": "CC-BY-NC-4.0",
+  "bugs": {
+    "url": "git+https://github.com/GloriaAnholt/express-mongo-relations/issues"
+  },
+  "homepage": "https://github.com/GloriaAnholt/express-mongo-relations#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.9.0",
+    "mocha": "^3.1.2",
+    "path": "^0.12.7"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.5"
+  }
+}
