@@ -1,30 +1,33 @@
 {
     "name": "Kris Bryant",
-    "team": "Cubs",
+    "position": "1B",
     "homers": 39
 }
 {
     "name": "Khris Davis",
-    "team": "Athletics",
+    "position": "OF",
     "homers": 42
 }
 {
     "name": "Ryon Healy",
-    "team": "Athletics",
+    "position": "3B",
     "homers": 13
 }
 {
     "team": "Athletics",
     "league": "American",
+    "division": "West",
     "wins": 69
 }
 {
     "team": "Cubs",
     "league": "National",
+    "division": "Central",
     "wins": 103
 }
 {
     "team": "Mariners",
     "league": "American",
+    "division": "West",
     "wins": 86
 }

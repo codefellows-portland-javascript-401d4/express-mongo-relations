@@ -1,10 +1,10 @@
-Express-Mongo-Resources assignment for Code Fellows 401
+Express-Mongo-Relations assignment for Code Fellows 401
 
 by Greg Katchmar
 
-1.0.0  2016-11-03
+1.0.0  2016-11-04
 
-Uses two soon-to-be-related models (player and teams) to crudely replicate a statistical baseball site including sorting of statistics, team records, etc.
+Uses two elated models (player and teams) to crudely replicate a statistical baseball site including sorting of statistics, team records, etc.
 
 "Node server.js" to launch program.
 
