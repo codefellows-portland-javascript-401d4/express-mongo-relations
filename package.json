@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/Waxhoya/express-mongo-relations/issues"
   },
-  "homepage": "https://github.com/Waxhoya/express-mongo-relations#readme"
+  "homepage": "https://github.com/Waxhoya/express-mongo-relations#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "morgan": "^1.7.0",
+    "nodemon": "^1.11.0"
+  }
 }
