@@ -1,0 +1,34 @@
+{
+  "name": "express-mongo-relations",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "lint": "eslint **/*.js",
+    "pretest": "npm run lint",
+    "test": "mocha",
+    "watch": "npm run test -- -w",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjfreem1/express-mongo-relations.git"
+  },
+  "author": "mjfreem1",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjfreem1/express-mongo-relations/issues"
+  },
+  "homepage": "https://github.com/mjfreem1/express-mongo-relations#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.9.1",
+    "mocha": "^3.1.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.6"
+  }
+}
