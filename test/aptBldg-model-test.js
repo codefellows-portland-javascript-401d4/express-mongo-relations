@@ -100,19 +100,4 @@ describe('Validate AptBldg model', () => {
         });
     });
 
-    it('Validation of apartment unit ids', done => {
-        const newAptBldg = new AptBldg({
-            name: 'Test Building',
-            location: 'Random Street',
-            nbrunits: 10,
-            vacantunits: 0,
-            aptUnitId: ['a2stApt','a2ndApt','a3rdApt']
-        });
-
-        newAptBldg.validate(err => {
-            assert.isOk(err, 'apartment unit ids must be in an array');
-            done();
-        });
-    });
-
 });

@@ -30,8 +30,7 @@ describe('Validating Apartment Buildings', () => {
         name: 'Test Apartment Building',
         location: 'random avenue',
         nbrunits: 20,
-        vacantunits: 0,
-        aptUnitId: []
+        vacantunits: 0
     };
 
     const testAptBldgUpd = {
@@ -43,16 +42,14 @@ describe('Validating Apartment Buildings', () => {
         name: 'Test Apartment Building',
         location: 'specific street',
         nbrunits: 20,
-        vacantunits: 3,
-        aptUnitId: []
+        vacantunits: 3
     };
 
     const testAptBldg2 = {
         name: 'Test Apartment Building 2',
         location: '2 random avenue',
         nbrunits: 22,
-        vacantunits: 2,
-        aptUnitId: []
+        vacantunits: 2
     };
 
     const request = chai.request(app);
@@ -110,6 +107,7 @@ describe('Validating Apartment Buildings', () => {
             .then( res => {
                 testAptBldgFinal.apartments = [];
                 assert.deepEqual(res.body, testAptBldgFinal);
+                delete testAptBldgFinal.apartments;
                 done();
             })
             .catch(done);
@@ -141,7 +139,7 @@ describe('Validating Apartment Buildings', () => {
         request
             .delete(`/api/aptbldgs/${testAptBldg._id}`)
             .then(res => {
-                assert.deepEqual(res.body, testAptBldg);
+                assert.deepEqual(res.body, testAptBldgFinal);
                 done();
             })
             .catch(done);
