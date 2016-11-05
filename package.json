@@ -9,9 +9,9 @@
   "scripts": {
     "pretest": "npm run lint",
     "lint": "eslint .",
-    "test": "MONGODB_URI=mongodb://localhost/notes-test-db mocha",
+    "test": "MONGODB_URI=mongodb://localhost/exmorel-db mocha",
     "test:watch": "npm run test -- -w",
-    "start": "MONGODB_URI=mongodb://localhost/anyDB nodemon index.js"
+    "start": "MONGODB_URI=mongodb://localhost/thisDB nodemon index.js"
   },
   "repository": {
     "type": "git",

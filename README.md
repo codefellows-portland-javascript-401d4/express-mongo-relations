@@ -8,10 +8,12 @@
   - The http server runs on localhost:3535
 
   - server.js is the server
+  - index.js is the server listener and the entry point to the project
   - app.js is the request handler
   - notes.js & tags.js are the routes
   - errHandler.js handles sending error messages to the client
-  -
+  - note.js & tag.js are the schematic models
+  - set-mongoose.js handles connection to the database
 
   - Upon navigating to specific paths, client will be able to get all documents, get specific documents, create new documents, update existing documents and delete specific documents for each collection - notes and tags
   - The database methods are implemented in the routes files for each collection: notes.js & tags.js

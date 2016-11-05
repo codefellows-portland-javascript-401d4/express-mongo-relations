@@ -15,6 +15,9 @@ describe('E2E testing the server', () => {
       .then((res) => {
         expect(res).to.have.status(200);
         done();
+      })
+      .catch((err) => {
+        done(err);
       });
   });
 

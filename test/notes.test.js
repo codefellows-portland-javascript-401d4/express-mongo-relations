@@ -60,7 +60,7 @@ describe('the note model', () => {
 
   it('navigates to /:id and GETs a note by id', (done) => {
     request
-      .get(`notes/${noteTested._id}`)
+      .get(`/notes/${noteTested._id}`)
       .then((res) => {
         const note = res.body;
         expect(note.data.text).to.deep.equal('test and learn');
@@ -93,7 +93,7 @@ describe('the note model', () => {
   it('updates a note in the database', (done) => {
     request
       .put(`/notes/${noteTested._id}`)
-      .send({title: 'modified note for testing', text: 'modified text', tags: ['notes', 'terminal', 'testing'})
+      .send({title: 'modified note for testing', text: 'modified text', tags: ['notes', 'terminal', 'testing']})
       .then((res) => {
         expect(res.body.data.text).to.deep.equal('modified text');
         done();
