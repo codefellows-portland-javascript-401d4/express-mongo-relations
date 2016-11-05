@@ -5,33 +5,25 @@ This database contains lords and ladies and houses from westeros, the continent 
 
 Directions:
 send all requests to the following field:
-  Url: 'localhost:3600/api/westeros' 
+  Url: 'localhost:3000/api/westeros' 
 
 
 GET: see a list of entries
-    All lords and ladies in the database:       Url: 'localhost:3600/api/westeros/nobles'
-    All houses in the database:                 Url: 'localhost:3600/api/westeros/houses'
-    All lords in the data base:                 Url: 'localhost:3600/api/westeros/lords'
-    All ladies in the data base:                Url: 'localhost:3600/api/westeros/ladies'
-    All lords and ladies of a specific house    Url: 'localhost:3600/api/westeros/nobles/$house'
+    All lords and ladies in the database:       Url: 'localhost:3000/api/westeros/nobles'
+    All houses in the database:                 Url: 'localhost:3000/api/westeros/houses'
+    All lords in the data base:                 Url: 'localhost:3000/api/westeros/nobles/lords'
+    All ladies in the data base:                Url: 'localhost:3000/api/westeros/nobles/ladies'
+    All lords and ladies of a specific house    Url: 'localhost:3000/api/westeros/houses/$house'
+    All old nobles                              Url: 'localhost:3000/api/westeros/nobles/old'
+    All nobles who died young                   Url: 'localhost:3000/api/westeros/nobles/died-young'
 
 you can also enter specific queries.  
-for example:   'localhost:3600/api/westeros/nobles&dead=true' would return all dead nobles.
-for example:   'localhost:3600/api/westeros/house&sigil=stag' would return house Baratheon.
+for example:   'localhost:3000/api/westeros/nobles&dead=true' would return all dead nobles.
+for example:   'localhost:3000/api/westeros/house&sigil=stag' would return house Baratheon.
   
   
-POST: add a noble to the database
-
-POST: a
-    You can add a tree to the trees database and the program will sort it automatically 
-   Example: {name: 'douglas fir', type: 'gymnosperm', genus: 'Pseudotsuga'}                 
-   Post Url: 'localhost:3200/api/trees'
+POST: add a noble to the database.  This will also attach them to their particular house.
 
 PUT: update an entry by id.
 
 DELETE: a noble or house by ID
-
-
-extra function: Fighting
-      typing the url 'localhost:3600/api/westeros/fight/house1&house2 will cause the two houses to battle.
-
