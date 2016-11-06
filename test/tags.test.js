@@ -3,6 +3,10 @@ const chaiHttp = require('chai-http');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
+//to test validation
+const Tag = require('../lib/models/tag');
+
+
 //need connection to db
 const connection = require('../lib/set-mongoose');
 
@@ -35,6 +39,28 @@ describe('the tag model', () => {
       heat: 'warm'
     };
 
+  it('validates with name', (done) => {
+    const tag = new Tag({
+      name: 'validation tag test',
+      description: 'and some validation testing text'
+    });
+
+    tag.validate((err) => {
+      if (!err) done();
+      else done(err);
+    });
+  });
+
+  it('requires a name to validate', (done) => {
+    const tag = new Tag();
+    tag.description = 'for testing';
+
+    tag.validate((err) => {
+      expect(err, 'name should have been required').to.be.ok;
+      done();
+    });
+  });
+  
   it('navigates to POST and stashes a new tag', (done) => {
     request
       .post('/tags/tagTested')
@@ -54,17 +80,6 @@ describe('the tag model', () => {
       .get('/')
       .then((res) => {
         expect(res.body).to.deep.equal({});
-        done();
-      })
-      .catch(done);
-  });
-
-  it('navigates to /:id and GETs a tag by id', (done) => {
-    request
-      .get(`/tags/${tagTested._id}`)
-      .then((res) => {
-        const tag = res.body;
-        expect(tag.data.description).to.deep.equal('test and learn');
         done();
       })
       .catch(done);

@@ -4,27 +4,18 @@ All changes to this project will be documented in this CHANGELOG
 Format based on Keep a Changelog (http://keepachangelog.com/)
 and project adheres to Semantic Versioning (http://semver.org).
 
-## [1.0.0] - 2016-11-04
+## [1.0.0] - 2016-11-06
 ### Changed
-- unit tests
-- e2e tests
-- CRUD operation functionality
-- README
+- mvp functionality
 
 ### Added
+- get all notes, web articles or tags functionality
+- get specific note, web article or tag functionality
+- post note, web article or tag functionality
+- delete note, web article or tag functionality
+- update note, web article or tag functionality
 - get last 5 updated notes functionality
-- delete note or tag functionality
-- update note or tag functionality
-- get specific note or tag functionality
-- get notes or tags that have specific property=value pair
-- unit testing to tags and notes routes
 
-## [0.9.0] - 2016-11-03
-### Changed
-- not quite production functionality
-
-### Added
-- get all notes or tags functionality
-- post note or tag functionality
-- update note or tag functionality
-- README
+- unit testing to tags, web articles and notes routes
+- e2e tests
+- README.md

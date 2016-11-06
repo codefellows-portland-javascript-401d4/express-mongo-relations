@@ -1,4 +1,4 @@
-# http hello/goodbye lab1 for CodeFellows 401
+# express mongo relations database server lab for CodeFellows 401
 
 ### Creator
  - Tim Combs
@@ -47,15 +47,12 @@
   - Data flows to and from the mongoDB database as JSON
 
 
-
 ### Use Cases
 
   - navigating to localhost:3535/ serves index.html to the browser, which displays 'Serving pages for you using node!'
 
   - navigating to localhost:3535/notes or localhost:3535/tags serves all the documents for the respective collection
   - navigating to localhost:3535/<notes_or_tags>/<specific_note_id_or_specific_tag_id> serves the specific document
-
-  - navigating to localhost:3535/<notes_or_tags>/search/<specific_property>/<specific_value> serves all the documents that contain the specific property=value pair for the respective collection
 
   - navigating to localhost:3535/notes/last5/notes serves the last 5 updated notes
 

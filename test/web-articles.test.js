@@ -3,6 +3,9 @@ const chaiHttp = require('chai-http');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
+//to test validation
+const WebArticle = require('../lib/models/web-article');
+
 //need to connect to db
 const connection = require('../lib/set-mongoose');
 
@@ -38,6 +41,30 @@ describe('the web article model', () => {
       tags: ['git', 'terminal', 'testing']
     };
 
+  it('validates with title, description, url', (done) => {
+    const webArticle = new WebArticle({
+      title: 'validation web article test',
+      description: 'and some validation testing text',
+      url: 'http://www.sometest.test'
+    });
+
+    webArticle.validate((err) => {
+      if (!err) done();
+      else done(err);
+    });
+  });
+
+  it('requires a title to validate', (done) => {
+    const webArticle = new WebArticle();
+    webArticle.description = 'another testing text';
+    webArticle.url = 'http://www.good.test';
+
+    webArticle.validate((err) => {
+      expect(err, 'title should have been required').to.be.ok;
+      done();
+    });
+  });
+  
   it('navigates to POST and stashes a new web article', (done) => {
     request
       .post('/web-articles')
@@ -83,16 +110,6 @@ describe('the web article model', () => {
       })
       .then((res) => {
         expect(res.body.data._id).to.be.ok;
-        done();
-      })
-      .catch(done);
-  });
-
-  it('finds web-articles with a tag named testing', (done) => {
-    request
-      .get('/web-articles/search/tags/testing')
-      .then((res) => {
-        expect(res.body.data[0].tags).to.include('testing');
         done();
       })
       .catch(done);
