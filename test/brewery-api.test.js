@@ -13,13 +13,12 @@ describe('the routes and models of breweries', () => {
   const server = chai.request(app);
 
   before(done => {
-
     const CONNECTED = 1;
     if (connection.readyState === CONNECTED) setupBrewery();
     else connection.on('open', setupBrewery);
 
     function setupBrewery() {
-      const name = 'testDB';
+      const name = 'Breweries';
       connection.db
         .listCollections({name})
         .next((err, collInfo) => {
@@ -27,7 +26,6 @@ describe('the routes and models of breweries', () => {
           connection.db.dropCollection(name, done);
         });
     }
-
   });
 
   it('posts new breweries to the list', done => {
@@ -168,4 +166,17 @@ describe('the routes and models of breweries', () => {
       });
   });
 
+
+  after(done => {
+
+    const name = 'Breweries';
+    connection.db
+      .listCollections({name})
+      .next((err, collInfo) => {
+        if (!collInfo) return done();
+        connection.db.dropCollection(name, done);
+      });
+  });
+
 });
+
