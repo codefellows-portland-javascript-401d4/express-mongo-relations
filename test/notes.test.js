@@ -3,6 +3,9 @@ const chaiHttp = require('chai-http');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
+//to test validation
+const Note = require('../lib/models/note');
+
 //need to connect to db
 const connection = require('../lib/set-mongoose');
 
@@ -33,6 +36,28 @@ describe('the note model', () => {
       text: 'test and learn',
       tags: ['notes', 'terminal', 'testing']
     };
+
+  it('validates with title and text', (done) => {
+    const note = new Note({
+      title: 'validation note test',
+      text: 'and some validation testing text'
+    });
+
+    note.validate((err) => {
+      if (!err) done();
+      else done(err);
+    });
+  });
+
+  it('requires a title to validate', (done) => {
+    const note = new Note();
+    note.text = 'another testing text';
+
+    note.validate((err) => {
+      expect(err, 'title should have been required').to.be.ok;
+      done();
+    });
+  });
 
   it('navigates to POST and stashes a new note', (done) => {
     request
@@ -75,16 +100,6 @@ describe('the note model', () => {
       .send({title: 'empty note test', text: 'not so empty'})
       .then((res) => {
         expect(res.body.data._id).to.be.ok;
-        done();
-      })
-      .catch(done);
-  });
-
-  it('finds notes with a tag named testing', (done) => {
-    request
-      .get('/notes/search/tags/testing')
-      .then((res) => {
-        expect(res.body.data[0].tags).to.include('testing');
         done();
       })
       .catch(done);
