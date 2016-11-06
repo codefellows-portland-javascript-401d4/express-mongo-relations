@@ -35,7 +35,8 @@ describe('tests the animechars and animeshows api along with db relations', () =
     const higurashi = {
         showname: 'Higurashi no Naku Koro Ni',
         airdate: '2006-04-04',
-        genre: 'mystery horror'
+        genre: 'mystery horror',
+        characters: []
     };
     let show_id = '';
 
@@ -60,8 +61,6 @@ describe('tests the animechars and animeshows api along with db relations', () =
                 higurashi._id = res.body._id;
                 higurashi.__v = 0;
                 higurashi.airdate = res.body.airdate;
-                higurashi.characters = [];
-                keiichi.show = higurashi._id;
                 assert.deepEqual(res.body, higurashi);
                 done();
             })
@@ -71,7 +70,7 @@ describe('tests the animechars and animeshows api along with db relations', () =
             });
     });
 
-    it('uses /POST to post a new anime char with the id from its parent show', done => {
+    it('uses /POST to post a new anime char', done => {
         request
             .post('/animechars')
             .send(keiichi)
@@ -79,6 +78,7 @@ describe('tests the animechars and animeshows api along with db relations', () =
                 assert.ok(res.body._id);
                 keiichi._id = res.body._id;
                 keiichi.__v = 0;
+                keiichi.showId = higurashi._id;
                 done();
             })
             .catch(err => {
@@ -87,11 +87,32 @@ describe('tests the animechars and animeshows api along with db relations', () =
             });
     });
 
-    it('uses /GET on the posted anime character and sees if it populates show', done => {
+    it('uses /PUT to update character with a given showId', done => {
         request
-            .get('/animechars/' + keiichi._id)
-            
-            
+            .put('/animeshows/' + higurashi._id + '/character/' + keiichi._id)
+            .then(res => {
+                assert.deepEqual(res.body, keiichi);
+                done();
+            })
+            .catch(err => {
+                console.error(err);
+                done();
+            })
+    });
+
+    it('calls /GET on keiichi which should now have the show field populated', done => {
+        request
+            .get('/animechars')
+            .then(res => {
+                keiichi.showId = { _id: higurashi._id, showname: higurashi.showname };
+                assert.deepEqual(res.body, keiichi);
+                console.log(res.body);
+                done();
+            })
+            .catch(err => {
+                console.error(err);
+                done();
+            });
     });
 
     it('calls /DELETE on the given show to remove it from the database', done => {
