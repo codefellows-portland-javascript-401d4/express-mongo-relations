@@ -61,6 +61,7 @@ describe('tests the animechars and animeshows api along with db relations', () =
                 higurashi.__v = 0;
                 higurashi.airdate = res.body.airdate;
                 higurashi.characters = [];
+                keiichi.show = higurashi._id;
                 assert.deepEqual(res.body, higurashi);
                 done();
             })
@@ -68,6 +69,29 @@ describe('tests the animechars and animeshows api along with db relations', () =
                 console.log('this is the error',err);
                 done(err);
             });
+    });
+
+    it('uses /POST to post a new anime char with the id from its parent show', done => {
+        request
+            .post('/animechars')
+            .send(keiichi)
+            .then(res => {
+                assert.ok(res.body._id);
+                keiichi._id = res.body._id;
+                keiichi.__v = 0;
+                done();
+            })
+            .catch(err => {
+                console.log(err);
+                done(err);
+            });
+    });
+
+    it('uses /GET on the posted anime character and sees if it populates show', done => {
+        request
+            .get('/animechars/' + keiichi._id)
+            
+            
     });
 
     it('calls /DELETE on the given show to remove it from the database', done => {
