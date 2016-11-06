@@ -96,16 +96,6 @@ describe('the tag model', () => {
       .catch(done);
   });
 
-  it('finds tags with a heat valued warm', (done) => {
-    request
-      .get('/tags/search/heat/warm')
-      .then((res) => {
-        expect(res.body.data[0].heat).to.include('warm');
-        done();
-      })
-      .catch(done);
-  });
-
   it('updates a tag in the database', (done) => {
     request
       .put(`/tags/${tagTested._id}`)
