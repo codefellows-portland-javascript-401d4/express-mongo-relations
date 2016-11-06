@@ -27,13 +27,21 @@ describe('Artists:', () => {
 
   const request = chai.request(app);
 
+  const recycledRainwater = {
+    name: 'recycled-rainwater',
+    location: '123-front-st',
+    genre: 'mixed-media',
+    type: 'visual'
+  };
+
   const quire = {
     name: 'quire',
     type: 'visual',
     genre: 'mixed-media',
-    showId: '581cf2cffcf9820b1f5a7d91',
+    showId: recycledRainwater._id,
     shows: 105
   };
+
 
   it('GETs all', done => {
     request
@@ -45,9 +53,10 @@ describe('Artists:', () => {
       .catch(done);
   });
 
-  it('POSTs a new artist', done => {
+  it('POSTs a new artist referencing an existing show', done => {
+
     request
-      .post('/api/artists')
+      .post('/api/artists/')
       .send(quire)
       .then(res => {
         const artist = res.body;
@@ -57,15 +66,15 @@ describe('Artists:', () => {
         done();
       })
       .catch(done);
-
   });
 
   it('GETs by id', done => {
     request
       .get(`/api/artists/${quire._id}`)
       .then(res => {
+        let expected = { _id: quire._id, name: 'quire', __v: 0, shows: 105, genre: 'mixed-media', type: 'visual' };
         const artist = res.body;
-        assert.deepEqual(artist, quire);
+        assert.deepEqual(artist, expected);
         done();
       })
       .catch(done);
@@ -75,7 +84,8 @@ describe('Artists:', () => {
     request
       .get('/api/artists')
       .then(res => {
-        assert.deepEqual(res.body, [quire]);
+        let expected = [ { _id: quire._id, name: 'quire', genre: 'mixed-media',type: 'visual' } ];
+        assert.deepEqual(res.body, expected);
         done();
       })
       .catch(done);
@@ -110,7 +120,8 @@ describe('Artists:', () => {
       .get('/api/artists')
       .query({genre: 'mixed-media'})
       .then(res => {
-        assert.deepEqual(res.body, [quire]);
+        let expected = [ { _id: quire._id, name: 'quire', genre: 'mixed-media',type: 'visual' } ];
+        assert.deepEqual(res.body, expected);
         done();
       })
       .catch(done);
@@ -120,7 +131,8 @@ describe('Artists:', () => {
     request
       .delete(`/api/artists/${quire._id}`)
       .then(res => {
-        assert.deepEqual(res.body, quire);
+        let expected = { _id: quire._id, name: 'quire', __v: 0, shows: 105, genre: 'mixed-media', type: 'visual' };
+        assert.deepEqual(res.body, expected);
         done();
       })
       .catch(done);

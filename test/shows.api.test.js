@@ -59,7 +59,7 @@ describe('Shows:', () => {
 
   });
 
-  it('GETs show by id with list of artist', done => {
+  it('GETs show by id with list of artists', done => {
 
     const quire = {
       name: 'quire',
@@ -84,7 +84,6 @@ describe('Shows:', () => {
             .then(res => {
               let expected = {_id: recycledRainwater._id, name: 'recycled-rainwater',location: '123-front-st', genre: 'mixed-media', type: 'visual', artists: [{"_id": quire._id, "genre": "mixed-media", "name": "quire"}] };
               const show = res.body;
-              console.log('Show: ', show);
               assert.deepEqual(show, expected);
               done();
             })
