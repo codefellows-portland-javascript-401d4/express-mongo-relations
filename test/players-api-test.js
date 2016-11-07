@@ -44,6 +44,13 @@ describe( 'player api', () => {
     homers: 39
   };
 
+  const athletics = {
+    team: 'Athletics',
+    league: 'American',
+    division: 'West',
+    wins: 69
+  };
+
   it( '/GET all', done => {
     request
 			.get( '/api/players' )
@@ -61,12 +68,21 @@ describe( 'player api', () => {
 			.then( res => {
   const player = res.body;
   assert.ok( player._id );
-  healy.__v = 0;
   healy._id = player._id;
   done();
 })
 			.catch( done );
 
+  });
+
+  it( '/GET all after post', done => {
+    request
+			.get( '/api/players' )
+			.then( res => {
+  assert.deepEqual( res.body, [ healy ] );
+  done();
+})
+			.catch( done );
   });
 
   it( '/GET by id', done => {
@@ -75,27 +91,6 @@ describe( 'player api', () => {
 			.then( res => {
   const player = res.body;
   assert.deepEqual( player, healy );
-  done();
-})
-			.catch( done );
-  });
-
-
-
-
-
-
-
-
-
-
-	
-
-  it( '/GET all after post', done => {
-    request
-			.get( '/api/players' )
-			.then( res => {
-  assert.deepEqual( res.body, [ healy ] );
   done();
 })
 			.catch( done );
@@ -112,18 +107,7 @@ describe( 'player api', () => {
 			.catch( done );
   });
 
-//   it( '/GET where team is Athletics', done => {
-//     request
-// 			.get( '/api/players' )
-// 			.query({ team: 'Athletics' })
-// 			.then( res => {
-//   assert.deepEqual( res.body, [ healy ] );
-//   done();
-// })
-// 			.catch( done );
-//   });
-
-  it( '/GETs sorted homer leader after 2nd player (Bryant) with more HRs added earlier', done => {
+  it( '/GETs sorted homer leaders after 2nd player (Bryant) with more HRs added earlier', done => {
     request
 			.get( '/api/players/hrLeaders' )
 			.then( res => {
@@ -133,11 +117,32 @@ describe( 'player api', () => {
 })
 			.catch( done );
   });
-	
+
+  it( '/POST adding team for next test', done => {
+    request
+			.post( '/api/teams' )
+			.send( athletics )
+			.then( res => {
+  const team = res.body;
+  assert.ok( team._id );
+  athletics.__v = 0;
+  athletics._id = team._id;
+  done();
+})
+			.catch( done );
+
+  });
+
+  it ('PUTs joins team ID into player data', done => {
+    testPath = '/api/teams/' + athletics._id + '/players/' + healy._id;
+    request
+			.put( testPath )
+			.then( res => {
+  assert.equal( res.body.teamId, athletics._id); 
+  done();
+})
+			.catch( done );
+  });
+
 });
-
-
-
-
-
 
