@@ -49,11 +49,12 @@ describe('Ship model', () => {
 
 describe('Character model', () => {
 
-  it('Validates with name and forceUser', done => {
+  it('Validates with name, forceUser, and shipId', done => {
 
     const character = new Character({
       name: 'Luke Skywalker',
-      forceUser: true
+      forceUser: true,
+      shipId: 'ad4934877df99g03'
     });
     character.validate(err => {
       if (!err) done();
