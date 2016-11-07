@@ -54,7 +54,7 @@ describe('Character model', () => {
     const character = new Character({
       name: 'Luke Skywalker',
       forceUser: true,
-      shipId: 'ad4934877df99g03'
+      shipId: '5821049133ced6e059832bd5'
     });
     character.validate(err => {
       if (!err) done();

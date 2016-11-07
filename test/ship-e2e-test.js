@@ -94,98 +94,22 @@ describe('RESTful API for ships resource', () => {
       .catch(done);
   });
   
+  it('Removes a ship with DELETE', done => {
+    request
+      .delete(`/api/ships/${ship1._id}`)
+      .then(() => {
+        request
+          .get('/api/ships')
+          .then(res => {
+            console.log('res', res.body);
+            console.log(res.body.length);
+            assert.equal(res.body.length, 0);
+            done();
+          })
+          .catch(done);
+      })
+      .catch(done);
+  });
+
 });
 
-describe('RESTful API for characters resource', () => {
-
-  before(done => {
-    let CONNECTED = 1;
-    if (connection.readyState === CONNECTED) dropCollection();
-    else connection.on('open', dropCollection);
-
-    function dropCollection() {
-      let name = 'characters';
-      connection.db
-        .listCollections({ name })
-        .next((err, info) => {
-          if (!info) return done();
-          connection.db.dropCollection(name, done);
-        });
-    }
-  });
-
-  const request = chai.request(app);
-  const char1 = {
-    name: 'Darth Vader',
-    forceUser: false,
-    shipId: '5820f965f4d001dbbfa60e61'
-  };
-  const char2 = {
-    name: 'Darth Vader',
-    forceUser: true,
-    shipId: '5820f965f4d001dbbfa60e61',
-    __v: 0
-  };
-
-  it('Starts with empty collection', done => {
-    request
-      .get('/api/characters')
-      .then(res => {
-        assert.deepEqual(res.body, []);
-        done();
-      })
-      .catch(done);
-  });
-
-  it('Adds a character to the collection', done => {
-    request
-      .post('/api/characters')
-      .send(char1)
-      .then(res => {
-        const resChar = res.body;
-        assert.ok(resChar._id);
-        char1._id = resChar._id;
-        char1.__v = 0;
-        done();
-      })
-      .catch(done);
-  });
-
-  it('Gets character by Id', done => {
-    request
-      .get(`/api/characters/${char1._id}`)
-      .then(res => {
-        const resChar = res.body;
-        assert.deepEqual(resChar, char1);
-        done();
-      })
-      .catch(done);
-  });
-
-  it('Gets all characters', done => {
-    request
-      .get('/api/characters')
-      .then(res => {
-        assert.deepEqual(res.body, [ char1 ]);
-        done();
-      })
-      .catch(done);
-  });
-
-  it('Updates a character with PUT', done => {
-    request
-      .put(`/api/characters/${char._id}`)
-      .send(char2)
-      .then(res => {
-        char2._id = char1._id;
-        assert.deepEqual(res.body, char2);
-        done();
-      })
-      .catch(done);
-  });
-
-  after(done => {
-    connection.close(done);
-  });
-  
-});
