@@ -59,6 +59,10 @@ describe('the note model', () => {
     });
   });
 
+
+  //e2e test is making requests of api end points
+
+
   it('navigates to POST and stashes a new note', (done) => {
     request
       .post('/notes')
