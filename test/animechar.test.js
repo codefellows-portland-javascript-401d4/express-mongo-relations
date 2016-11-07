@@ -18,7 +18,7 @@ describe('unit testing animechar model', () => {
         edward.validate(err => {
             if(err) done(err);
             else {
-                console.log(edward);
+                // console.log(edward);
                 done();
             };
         });
@@ -39,7 +39,7 @@ describe('unit testing animechar model', () => {
                 assert.isOk(err, 'this should fail for sure as a a failed for value at path');
                 done();
             } else {
-                done('this should fail');
+                done(err,'this should fail');
             }
         });
     });
@@ -63,6 +63,6 @@ describe('unit testing animechar model', () => {
         lain.validate(err => {
             if (err) done(err);
             else done();
-        })
+        });
     });
 });
