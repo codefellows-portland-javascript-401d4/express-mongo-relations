@@ -2,7 +2,7 @@
 ==================================================
 This app launches a local HTTP server which is backed by a persistent data store. The server responds to GET, POST, PUT and DELETE requests for resources '/teams' and '/players', with the domain being my fantasy football league. :football:
 
-...with the bonus of being powered by Express! :bullettrain_side:
+...with the bonus of being powered by Express! :train:
 
 ...and Mongo! :floppy_disk:
 
