@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Arya",
+    "house": "Stark",
+    "female": true,
+    "age": 13,
+    "alive": true
+  },
+  {
+    "name": "Sansa",
+    "house": "Stark",
+    "age": 16,
+    "female": true,
+    "alive": true
+  },
+  {
+    "name": "Rob",
+    "house": "Stark",
+    "age": 18,
+    "female": false,
+    "alive": false
+  },
+  {
+    "name": "Ned",
+    "house": "Stark",
+    "age": 40,
+    "female": false,
+    "alive": false
+  },
+  {
+    "name": "Mace",
+    "house": "Tyrell",
+    "age": 50,
+    "female": false,
+    "alive": true
+  },
+  {
+    "name": "Loras",
+    "house": "Tyrell",
+    "female": false,
+    "age": 18,
+    "alive": true
+  },
+  {
+    "name": "Margaery",
+    "house": "Tyrell",
+    "age": 17,
+    "female": true,
+    "alive": true
+  },
+    {
+    "name": "Olenna",
+    "house": "Tyrell",
+    "age": 68,
+    "female": true,
+    "alive": true
+  }
+]
