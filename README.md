@@ -4,7 +4,7 @@ by Greg Katchmar
 
 1.0.0  2016-11-04
 
-Uses two elated models (player and teams) to crudely replicate a statistical baseball site including sorting of statistics, team records, etc.
+Uses two related models (player and teams) to crudely replicate a statistical baseball site including sorting of statistics, team records, etc.
 
 "Node server.js" to launch program.
 
