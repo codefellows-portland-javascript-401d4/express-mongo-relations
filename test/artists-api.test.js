@@ -28,7 +28,8 @@ describe('artists api', () => {
 
     const testArtist = {
         name: 'salvador dalí',
-        birthdate: 'May 11th'
+        birthdate: 'May 11th',
+        movementId: []
     };
 
     it('/GETs all artists', done => {
