@@ -96,8 +96,8 @@ describe('tests the animechars and animeshows api along with db relations', () =
             })
             .catch(err => {
                 console.error(err);
-                done();
-            })
+                done(err);
+            });
     });
 
     it('calls /GET on keiichi which should now have the show field populated', done => {
@@ -105,13 +105,30 @@ describe('tests the animechars and animeshows api along with db relations', () =
             .get('/animechars')
             .then(res => {
                 keiichi.showId = { _id: higurashi._id, showname: higurashi.showname };
-                assert.deepEqual(res.body, keiichi);
-                console.log(res.body);
+                assert.deepEqual(res.body[0], keiichi);
                 done();
             })
             .catch(err => {
                 console.error(err);
+                done(err);
+            });
+    });
+
+    it('calls /GET on animeshows which should now have a character field populated', done => {
+        request
+            .get('/animeshows/' + higurashi._id)
+            .then(res => {
+                keiichi.showId = higurashi._id;
+                higurashi.characters.push(keiichi);
+                delete higurashi.__v;
+                // console.log('body',res.body);
+                // console.log('higurashi', higurashi);
+                assert.deepEqual(res.body, higurashi);
                 done();
+            })
+            .catch(err => {
+                console.error(err);
+                done(err);
             });
     });
 
@@ -119,11 +136,26 @@ describe('tests the animechars and animeshows api along with db relations', () =
         request
             .del('/animeshows/' + higurashi._id)
             .then(res => {
+                higurashi.characters = [];
+                higurashi.__v = 0;
                 assert.deepEqual(res.body, higurashi);
                 done();
             })
             .catch(err => {
                 console.log(err);
+                done(err);
+            });
+    });
+
+    it('calls /DELETE on the given character to remove it from the database', done => {
+        request
+            .del('/animechars/' + keiichi._id)
+            .then(res => {
+                assert.deepEqual(res.body, keiichi);
+                done();
+            })
+            .catch(err => {
+                console.error(err);
                 done(err);
             });
     });

@@ -7,7 +7,7 @@
     "pretest": "eslint ./",
     "test": "mocha ./test/",
     "test:watch": "mocha ./test/ -w",
-    "start": "mocha ./test/ && nodemon server.js",
+    "start": "eslint ./ && mocha ./test/ && nodemon server.js",
     "lint": "eslint ./"
   },
   "repository": {
