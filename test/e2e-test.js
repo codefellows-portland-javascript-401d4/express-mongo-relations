@@ -31,7 +31,7 @@ describe('RESTful API for ships resource', () => {
   };
   const ship2 = {
     name: 'Millenium Falcon',
-    type: 'Smuggling Vessel'
+    type: 'Smuggling Vessel',
     __v: 0
   };
 
@@ -61,7 +61,7 @@ describe('RESTful API for ships resource', () => {
 
   it('Gets ship by Id', done => {
     request
-      .get(`/api/ship/${ship1._id}`)
+      .get(`/api/ships/${ship1._id}`)
       .then(res => {
         const resShip = res.body;
         assert.deepEqual(resShip, ship1);
