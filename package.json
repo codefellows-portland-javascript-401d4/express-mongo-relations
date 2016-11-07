@@ -1,0 +1,32 @@
+{
+  "name": "express-mongo-relations",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "eslint .",
+    "test": "mocha",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viper86/express-mongo-relations.git"
+  },
+  "author": "Tyler Smith",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/viper86/express-mongo-relations/issues"
+  },
+  "homepage": "https://github.com/viper86/express-mongo-relations#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "mongoose": "^4.6.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.9.1",
+    "mocha": "^3.1.2",
+    "nodemon": "^1.11.0"
+  }
+}
