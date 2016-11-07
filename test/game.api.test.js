@@ -33,7 +33,6 @@ describe('game end to end test', () => {
         platform: ['PC', 'Playstation 4', 'Xbox One']
     };
 
-
     it('GETs all', done => {
         request
             .get('/games')
@@ -57,12 +56,13 @@ describe('game end to end test', () => {
             .catch(done);
     });
 
-    it('GETs by ID', done => {
+    it('GETs by ID with characters', done => {
         request
             .get(`/games/${witcher3._id}`)
             .then(res => {
                 const game = res.body;
-                assert.deepEqual(game, witcher3);
+                console.log('body', game);
+                assert.property(game, 'characters');
                 done();
             })
             .catch(done);
