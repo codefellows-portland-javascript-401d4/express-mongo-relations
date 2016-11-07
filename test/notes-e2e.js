@@ -66,8 +66,6 @@ describe('notes', () => {
     request
       .get(`/notes/${cat._id}`)
       .then(response => {
-        console.log(cat);
-        console.log(response.body);
         assert.deepEqual(cat, response.body);
         done();
       })
@@ -144,7 +142,4 @@ describe('notes', () => {
       });
   });
 
-  after(done => {
-    connection.close(done);
-  });
 });
