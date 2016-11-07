@@ -4,11 +4,12 @@ const assert = require('chai').assert;
 
 describe('Ship model', () => {
 
-  it('Validates with name and type', done => {
+  it('Validates with name, type, and length', done => {
 
     const ship = new Ship({
       name: 'Millenium Falcon',
-      type: 'Smuggling Vessel'
+      type: 'Smuggling Vessel',
+      lengthMeters: 34.75
     });
     ship.validate(err => {
       if (!err) done();
@@ -20,7 +21,8 @@ describe('Ship model', () => {
   it('Requires name', done => {
 
     const ship = new Ship({
-      type: 'Fighter'
+      type: 'Fighter',
+      lengthMeters: 50
     });
     ship.validate(err => {
       assert.isOk(err, 'Name is required.');
@@ -32,7 +34,8 @@ describe('Ship model', () => {
   it('Sets default type to unkown', done => {
 
     const ship = new Ship({
-      name: 'Tantive V'
+      name: 'Tantive IV',
+      lengthMeters: 540
     });
     ship.validate(err => {
       assert.isNotOk(err);
@@ -46,12 +49,11 @@ describe('Ship model', () => {
 
 describe('Character model', () => {
 
-  it('Validates with name, forceUser, and ship', done => {
+  it('Validates with name and forceUser', done => {
 
     const character = new Character({
       name: 'Luke Skywalker',
-      forceUser: true,
-      ship: 'X-wing'
+      forceUser: true
     });
     character.validate(err => {
       if (!err) done();
