@@ -11,7 +11,7 @@ const app = require('../lib/app');
 describe('artists api', () => {
     before(done => {
         function dropCollection() {
-            const name = 'painters';
+            const name = 'artists';
             connection.db
                 .listCollections({ name })
                 .next((error, collectinfo) => {
@@ -26,9 +26,9 @@ describe('artists api', () => {
 
     const request = chai.request(app);
 
-    const testPainter = {
+    const testArtist = {
         name: 'salvador dalí',
-        style: 'surrealism'
+        birthdate: 'May 11th'
     };
 
     it('/GETs all artists', done => {
@@ -44,12 +44,12 @@ describe('artists api', () => {
     it('/POSTs a new artist', done => {
         request
             .post('/artists')
-            .send(testPainter)
+            .send(testArtist)
             .then(response => {
-                const painter = response.body;
-                assert.ok(painter._id);
-                testPainter.__v = 0;
-                testPainter._id = painter._id;
+                const artist = response.body;
+                assert.ok(artist._id);
+                testArtist.__v = 0;
+                testArtist._id = artist._id;
                 done();
             })
             .catch(done);
@@ -59,7 +59,7 @@ describe('artists api', () => {
         request
             .get('/artists')
             .then(response => {
-                assert.deepEqual(response.body, [testPainter]);
+                assert.deepEqual(response.body, [testArtist]);
                 done();
             })
             .catch(done);
@@ -67,10 +67,10 @@ describe('artists api', () => {
 
     it('/GETs an artist by id', done => {
         request
-            .get(`/artists/${testPainter._id}`)
+            .get(`/artists/${testArtist._id}`)
             .then(response => {
-                const painter = response.body;
-                assert.deepEqual(painter, testPainter);
+                const artist = response.body;
+                assert.deepEqual(artist, testArtist);
                 done()
             })
             .catch(done);
@@ -78,7 +78,7 @@ describe('artists api', () => {
 
     it('removes an artist for /DELETE request', done => {
         request 
-            .delete(`/artists/${testPainter._id}`)
+            .delete(`/artists/${testArtist._id}`)
             .then(response => {
                 assert.isOk(response.body, 'deleted');
                 done();
