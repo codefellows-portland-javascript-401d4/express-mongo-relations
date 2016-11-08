@@ -306,13 +306,14 @@ describe('e2e testing the tag model', () => {
   
   it('navigates to POST and stashes a new tag', (done) => {
     request
-      .post('/tags/tagTested')
+      .post('/tags')
       .send(tagTested)
       .then((res) => {
         const tag = res.body;
         expect(tag.data._id).to.be.ok;
         tagTested.__v = 0;
         tagTested._id = tag.data._id;
+        console.log(res.body, tagTested._id);
         done();
       })
       .catch(done);
@@ -320,20 +321,71 @@ describe('e2e testing the tag model', () => {
 
   it('navigates to the root and GETs all tags', (done) => {
     request
-      .get('/')
+      .get('/tags')
       .then((res) => {
-        expect(res.body).to.deep.equal({});
+        expect(res.body[0].heat).to.deep.equal('warm');
         done();
+      })
+      .catch(done);
+  });
+
+  it('navigates to root and GETs all tags and associated notes & web-articles', (done) => {
+    const testNote = {
+      title: 'test note to show population',
+      text: 'the test note text',
+      tagId: tagTested._id
+    };
+
+    const testWebArticle = {
+      title: 'test article to show population',
+      description: 'a test description',
+      url: 'http:www.test.this',
+      tagId: tagTested._id
+    };
+
+    request
+      .post('/notes')
+      .send(testNote)
+      .then((res) => {
+        const note = res.body;
+        expect(note.data._id).to.be.ok;
+        testNote.__v = 0;
+        testNote._id = note.data._id;
+      })
+      .then(() => {
+        request
+          .post('/web-articles')
+          .send(testWebArticle)
+          .then((res) => {
+            const webArticle = res.body;
+            expect(webArticle.data._id).to.be.ok;
+            testWebArticle.__v = 0;
+            testWebArticle._id = webArticle.data._id;
+          });
+      })
+      .then(() => {
+        console.log('tagTested id', tagTested._id);
+        request
+          .get(`/tags/${tagTested._id}`)
+          .then((res) => {
+            const tag = res.body.data;
+            let expVal = {};
+            console.log(res.body);
+            expect(expVal).to.deep.equal(tag);
+            done();
+          })
+          .catch(done);
       })
       .catch(done);
   });
 
   it('stashes a tag with no heat', (done) => {
     request
-      .post('/tags/:id')
+      .post('/tags')
       .send({name: 'empty tag test', description: 'just for testing', heat: ''})
       .then((res) => {
-        expect(res.body.data._id).to.be.ok;
+        expect(res.body.data).to.be.ok;
+        expect(res.body.data.heat).to.deep.equal('');
         done();
       })
       .catch(done);
@@ -350,18 +402,28 @@ describe('e2e testing the tag model', () => {
       .catch(done);
   });
 
-  it('deletes a tag from the database', (done) => {
-    request
-      .delete(`/tags/${tagTested._id}`)
-      .then(() => {
-        request
-          .get(`/tags/${tagTested._id}`)
-          .then((res) => {
-            expect(res.body.data).to.deep.equal(undefined);
-          });
-        done();
-      })
-      .catch(done);
-  });
+  // it('finds tags with a heat valued warm', (done) => {
+  //   request
+  //   .get('/tags/search/heat/warm')
+  //   .then((res) => {
+  //     expect(res.body.data[0].heat).to.include('warm');
+  //     done();
+  //   })
+  //   .catch(done);
+  // });
+
+  // it('deletes a tag from the database', (done) => {
+  //   request
+  //     .delete(`/tags/${tagTested._id}`)
+  //     .then(() => {
+  //       request
+  //         .get(`/tags/${tagTested._id}`)
+  //         .then((res) => {
+  //           expect(res.body.data).to.deep.equal(undefined);
+  //         });
+  //       done();
+  //     })
+  //     .catch(done);
+  // });
 
 });
