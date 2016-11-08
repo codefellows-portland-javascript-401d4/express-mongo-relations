@@ -7,8 +7,7 @@
   - This is a Code Fellows Lab Assignment to create an http express server that uses mongoDB for persistent storage and retrieval and mongoose as the templating and validation layer - it creates a database for notes, web articles and tags and relations between the collections
   - The http server runs on localhost:3535
 
-  - server.js is the server
-  - index.js is the server listener and the entry point to the project
+  - server.js is the server, listener and the entry point to the project
   - app.js is the request handler
   - notes.js & tags.js & web-articles.js are the routes
   - errHandler.js handles sending error messages to the client
