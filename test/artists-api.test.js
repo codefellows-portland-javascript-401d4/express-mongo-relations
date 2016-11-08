@@ -76,6 +76,18 @@ describe('artists api', () => {
             .catch(done);
     });
 
+    it('updates an artist for /PUT request', done => {
+        request
+            .put(`/artists/${testArtist._id}`)
+            .send(testArtist.name)
+            .then(response => {
+                const update = response.body.name
+                assert.deepEqual(update, testArtist.name);
+                done();
+            })
+            .catch(done);
+    });
+
     it('removes an artist for /DELETE request', done => {
         request 
             .delete(`/artists/${testArtist._id}`)

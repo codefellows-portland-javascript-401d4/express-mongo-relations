@@ -81,6 +81,18 @@ describe('movements api', () => {
             .catch(done);
     });
 
+    it('updates a movement for /PUT request', done => {
+        request
+            .put(`/movements/${testMovement._id}`)
+            .send(testMovement.name)
+            .then(response => {
+                const update = response.body.name
+                assert.deepEqual(update, testMovement.name);
+                done();
+            })
+            .catch(done);
+    });
+
     it('removes a movement for /DELETE request', done => {
         request 
             .delete(`/movements/${testMovement._id}`)
