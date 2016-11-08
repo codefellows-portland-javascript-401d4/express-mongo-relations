@@ -313,7 +313,6 @@ describe('e2e testing the tag model', () => {
         expect(tag.data._id).to.be.ok;
         tagTested.__v = 0;
         tagTested._id = tag.data._id;
-        console.log(res.body, tagTested._id);
         done();
       })
       .catch(done);
@@ -361,17 +360,34 @@ describe('e2e testing the tag model', () => {
             expect(webArticle.data._id).to.be.ok;
             testWebArticle.__v = 0;
             testWebArticle._id = webArticle.data._id;
-          });
+          })
+          .catch(done);
       })
       .then(() => {
-        console.log('tagTested id', tagTested._id);
         request
           .get(`/tags/${tagTested._id}`)
           .then((res) => {
-            const tag = res.body.data;
-            let expVal = {};
-            console.log(res.body);
-            expect(expVal).to.deep.equal(tag);
+            let expVal = { 
+              message: 'Your tag has been found',
+              data: {
+                _id: tagTested._id,
+                name: 'tag for testing',
+                description: 'test and learn',
+                heat: 'warm',
+                __v: 0,
+                notes: [{
+                  '_id': testNote._id,
+                  'text': 'the test note text',
+                  'title': 'test note to show population'
+                }],
+                webArticles: [{
+                  '_id': testWebArticle._id,
+                  'description': 'a test description',
+                  'title': 'test article to show population',
+                  'url': 'http:www.test.this'}
+                ]}
+            };
+            expect(expVal).to.deep.equal(res.body);
             done();
           })
           .catch(done);
@@ -402,28 +418,28 @@ describe('e2e testing the tag model', () => {
       .catch(done);
   });
 
-  // it('finds tags with a heat valued warm', (done) => {
-  //   request
-  //   .get('/tags/search/heat/warm')
-  //   .then((res) => {
-  //     expect(res.body.data[0].heat).to.include('warm');
-  //     done();
-  //   })
-  //   .catch(done);
-  // });
+  it('finds tags with a heat valued warm', (done) => {
+    request
+    .get('/tags/search/heat/warm')
+    .then((res) => {
+      expect(res.body.data[0].heat).to.include('warm');
+      done();
+    })
+    .catch(done);
+  });
 
-  // it('deletes a tag from the database', (done) => {
-  //   request
-  //     .delete(`/tags/${tagTested._id}`)
-  //     .then(() => {
-  //       request
-  //         .get(`/tags/${tagTested._id}`)
-  //         .then((res) => {
-  //           expect(res.body.data).to.deep.equal(undefined);
-  //         });
-  //       done();
-  //     })
-  //     .catch(done);
-  // });
+  it('deletes a tag from the database', (done) => {
+    request
+      .delete(`/tags/${tagTested._id}`)
+      .then(() => {
+        request
+          .get(`/tags/${tagTested._id}`)
+          .then((res) => {
+            expect(res.body.data).to.deep.equal(undefined);
+          });
+        done();
+      })
+      .catch(done);
+  });
 
 });
