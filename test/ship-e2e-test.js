@@ -101,8 +101,6 @@ describe('RESTful API for ships resource', () => {
         request
           .get('/api/ships')
           .then(res => {
-            console.log('res', res.body);
-            console.log(res.body.length);
             assert.equal(res.body.length, 0);
             done();
           })

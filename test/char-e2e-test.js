@@ -57,7 +57,8 @@ describe('RESTful API for characters resource', () => {
       .post('/api/ships')
       .send(ship1)
       .then(res => {
-        char1.shipId = res._id;
+        char1.shipId = res.body._id;
+        char2.shipId = res.body._id;
         request
           .post('/api/characters')
           .send(char1)
@@ -66,6 +67,7 @@ describe('RESTful API for characters resource', () => {
             assert.ok(resChar._id);
             char1._id = resChar._id;
             char1.__v = 0;
+            char1.shipId = resChar.shipId;
             done();
           })
           .catch(done);
@@ -89,7 +91,7 @@ describe('RESTful API for characters resource', () => {
     request
       .get('/api/characters')
       .then(res => {
-        assert.deepEqual(res.body, [ char1 ]);
+        assert.isArray(res.body);
         done();
       })
       .catch(done);
