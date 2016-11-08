@@ -11,19 +11,19 @@ const request = chai.request(app);
 describe('character end to end test', () => {
 
     before(done => {
-        const CONNECTED = 1;
-        if(connection.readyState === CONNECTED) dropCollection();
-        else connection.on('open', dropCollection);
+        const drop = () => connection.db.dropDatabase(done);
+        if(connection.readyState === 1) drop();
+        else connection.on('open', drop);
+    });
 
-        function dropCollection() {
-            const name = 'characters';
-            connection.db
-                .listCollections({name})
-                .next((err, collinfo) => {
-                    if(!collinfo) return done();
-                    connection.db.dropCollection(name, done);
-                });
-        }
+    let token = '';
+
+    before(done => {
+        request
+            .post('/auth/signup')
+            .send({ username: 'testuser', password: 'testpassword' })
+            .then(res => assert.ok(token = res.body.token))
+            .then(done, done);
     });
 
     const geralt = {
@@ -36,6 +36,7 @@ describe('character end to end test', () => {
     it('GETs all', done => {
         request
             .get('/characters')
+            .set('Authorization', token)
             .then(res => {
                 assert.deepEqual(res.body, []);
                 done();
@@ -46,6 +47,7 @@ describe('character end to end test', () => {
     it('POSTs', done => {
         request
             .post('/characters')
+            .set('Authorization', token)
             .send(geralt)
             .then(res => {
                 const character = res.body;
@@ -59,6 +61,7 @@ describe('character end to end test', () => {
     it('GETs by ID', done => {
         request
             .get(`/characters/${geralt._id}`)
+            .set('Authorization', token)
             .then(res => {
                 const character = res.body;
                 assert.deepEqual(character, geralt);
@@ -70,6 +73,7 @@ describe('character end to end test', () => {
     it('GETs where sex is male', done => {
         request
             .get('/characters')
+            .set('Authorization', token)
             .query({sex: 'male'})
             .then(res => {
                 assert.deepEqual(res.body, [geralt]);
@@ -81,6 +85,7 @@ describe('character end to end test', () => {
     it('DELETEs by ID', done => {
         request
             .delete(`/characters/${geralt._id}`)
+            .set('Authorization', token)
             .then(res => {
                 assert.deepEqual(res.body, geralt);
                 done();
