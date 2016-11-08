@@ -49,7 +49,6 @@ describe('artists api', () => {
             .then(response => {
                 const artist = response.body;
                 assert.ok(artist._id);
-                testArtist.__v = 0;
                 testArtist._id = artist._id;
                 done();
             })
@@ -67,7 +66,7 @@ describe('artists api', () => {
             .catch(done);
     });
 
-    it.skip('/GETs all artists after new post', done => {
+    it('/GETs all artists after new post', done => {
         request
             .get('/artists')
             .then(response => {

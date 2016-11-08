@@ -58,10 +58,11 @@ describe('movements api', () => {
             .catch(done);
     });
 
-    it.skip('/GETs a movement by id', done => {
+    it('/GETs a movement by id', done => {
         request
             .get(`/movements/${testMovement._id}`)
             .then(response => {
+                testMovement.artists = [];
                 const movement = response.body;
                 assert.deepEqual(movement, testMovement);
                 done()
@@ -73,6 +74,7 @@ describe('movements api', () => {
         request
             .get('/movements')
             .then(response => {
+                delete testMovement.artists;
                 assert.deepEqual(response.body, [testMovement]);
                 done();
             })
