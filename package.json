@@ -9,15 +9,15 @@
   "scripts": {
     "pretest": "npm run lint",
     "lint": "eslint .",
-    "test": "MONGODB_URI=mongodb://localhost/exmorel-db mocha",
+    "test": "MONGODB_URI=mongodb://localhost/exmorel-test-db mocha",
     "test:watch": "npm run test -- -w",
-    "start": "MONGODB_URI=mongodb://localhost/thisDB nodemon index.js"
+    "start": "MONGODB_URI=mongodb://localhost/exmorel-db nodemon index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/timcombs/express-mongo-relations"
   },
-  "author": "",
+  "author": "tim combs",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/timcombs/express-mongo-relations"

@@ -16,10 +16,11 @@
   - set-mongoose.js handles connection to the database
 
   - Upon navigating to specific paths, client will be able to get all documents, get specific documents, create new documents, update existing documents and delete specific documents for each collection - notes and tags
-  - The database methods are implemented in the routes files for each collection: notes.js & tags.js
+  - The database methods are implemented in the routes files for each collection: notes.js, web-articles.js & tags.js
     - GET all requests for the /notes, /web-articles or /tags
     - GET requests for the /notes/:id, /web-articles/:id or /tags/:id
     - GET requests for the last 5 updated records for /notes
+    - GET requests for specific key=value pairs
     - POST requests for the /notes/:id, /web-articles/:id or /tags/:id
     - PUT requests to overwrite for the /notes/:id, /web-articles/:id or /tags/:id
     - DELETE requests for the /notes/:id, /web-articles/:id or /tags/:id
@@ -68,12 +69,11 @@
   - Set Up
     - To run the test suite, from the command line at the root of the project directory type:
       ```
-      $ mocha
+      $ npm test
       ```
-    - you will see unit tests for the tags and notes route files and e2e tests
-
-    - mocha will then use a test database notes-test-dbto run through a series of get, push, post & delete requests.
-
+    - this will first run eslint - for more info look at .eslintrc
+    - then mocha will use the exmorel-test-db database to run unit tests and e2e tests
+    
   - simple testing can be done using a browser for GET requests or an app like Postman [https://www.getpostman.com/] for the other request methods
 
 ### Code Shape
