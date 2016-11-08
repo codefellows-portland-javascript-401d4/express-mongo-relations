@@ -9,22 +9,21 @@ const app = require('../lib/app');
 describe ('actor', () => {
 
     before( done => {
-        const Connected = 1;
-        if (connection.readyState === Connected) dropCollection();
-        else connection.on('open', dropCollection);
-
-        function dropCollection(){
-            const name = 'actors';
-            connection.db
-                .listCollections({name})
-                .next((err, collinfo) => {
-                    if (!collinfo) return done();
-                    connection.db.dropCollection(name, done);
-                });
-        }
+        const drop = () => connection.db.dropDatabase(done);
+        if(connection.readyState === 1) drop();
+        else connection.on('open', drop);
     });
 
     const request = chai.request(app);
+    let token = '';
+
+    before(done => {
+        request
+            .post('/auth/signup')
+            .send({username: 'testuser', password: 'abc', roles: 'admin'})
+            .then(res => assert.ok(token = res.body.token))
+            .then(done, done);
+    });
 
     const alPacino = {
         name: 'Al Pacino',
@@ -36,6 +35,7 @@ describe ('actor', () => {
     it ('Get All', done =>{
         request
             .get('/actors')
+            .set('Authorization', `Bearer ${token}`)
             .then(res => {
                 assert.deepEqual(res.body, []);
                 done();
@@ -45,6 +45,7 @@ describe ('actor', () => {
     it('Post', done => {
         request
             .post('/actors')
+            .set('Authorization', `Bearer ${token}`)
             .send(alPacino)
             .then(res => {
                 const actor = res.body;
@@ -57,6 +58,7 @@ describe ('actor', () => {
     it('Get all after Post', done => {
         request
             .get('/actors')
+            .set('Authorization', `Bearer ${token}`)
             .then(res => {
                 assert.deepEqual(res.body, [alPacino]);
                 done();
@@ -66,6 +68,7 @@ describe ('actor', () => {
     it ('get by id', done => {
         request
         .get(`/actors/${alPacino._id}`)
+        .set('Authorization', `Bearer ${token}`)
         .then(res => {
             const actor = res.body;
             assert.deepEqual(actor, alPacino);
@@ -76,6 +79,7 @@ describe ('actor', () => {
     it('gets by name', done => {
         request
         .get(`/actors?name=Al%20Pacino`)
+        .set('Authorization', `Bearer ${token}`)
         .then(res => {
             const actor = res.body;
             assert.deepEqual(actor, [alPacino]);
@@ -86,6 +90,7 @@ describe ('actor', () => {
     it('gets academy award winners', done =>{
         request
         .get(`/actors/aa/true`)
+        .set('Authorization', `Bearer ${token}`)
         .then(res => {
             const actor = res.body;
             assert.deepEqual(actor, [alPacino]);
@@ -96,6 +101,7 @@ describe ('actor', () => {
     it('deletes', done => {
         request
             .delete(`/actors/${alPacino._id}`)
+            .set('Authorization', `Bearer ${token}`)
             .then(res => {
                 assert.isOk(res.body, 'deleted');
                 done();

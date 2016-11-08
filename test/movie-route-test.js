@@ -9,19 +9,19 @@ const app = require('../lib/app');
 describe ('movie', () => {
 
     before( done => {
-        const Connected = 1;
-        if (connection.readyState === Connected) dropCollection();
-        else connection.on('open', dropCollection);
+        const drop = () => connection.db.dropDatabase(done);
+        if(connection.readyState === 1) drop();
+        else connection.on('open', drop);
+    });
 
-        function dropCollection(){
-            const name = 'movies';
-            connection.db
-                .listCollections({name})
-                .next((err, collinfo) => {
-                    if (!collinfo) return done();
-                    connection.db.dropCollection(name, done);
-                });
-        }
+    let token = '';
+
+    before(done => {
+        request
+            .post('/auth/signup')
+            .send({username: 'testuser', password: 'abc', roles: 'admin'})
+            .then(res => assert.ok(token = res.body.token))
+            .then(done, done);
     });
 
     const request = chai.request(app);
@@ -36,6 +36,7 @@ describe ('movie', () => {
     it ('Get All', done =>{
         request
             .get('/movies')
+            .set('Authorization', `Bearer ${token}`)
             .then(res => {
                 assert.deepEqual(res.body, []);
                 done();
@@ -45,6 +46,7 @@ describe ('movie', () => {
     it('Post', done => {
         request
             .post('/movies')
+            .set('Authorization', `Bearer ${token}`)
             .send(scarface)
             .then(res => {
                 const movie = res.body;
@@ -60,6 +62,7 @@ describe ('movie', () => {
     it('Get all after Post', done => {
         request
             .get('/movies')
+            .set('Authorization', `Bearer ${token}`)
             .then(res => {
                 assert.deepEqual(res.body, [scarface]);
                 done();
@@ -69,6 +72,7 @@ describe ('movie', () => {
     it ('get by id', done => {
         request
         .get(`/movies/${scarface._id}`)
+        .set('Authorization', `Bearer ${token}`)
         .then(res => {
             const movie = res.body;
             assert.deepEqual(movie, scarface);
@@ -79,6 +83,7 @@ describe ('movie', () => {
     it('gets by genre', done => {
         request
         .get(`/movies?genre=Drama`)
+        .set('Authorization', `Bearer ${token}`)
         .then(res => {
             const movie = res.body;
             assert.deepEqual(movie, [scarface]);
@@ -89,6 +94,7 @@ describe ('movie', () => {
     it('gets academy award winners', done =>{
         request
         .get(`/movies/aa/false`)
+        .set('Authorization', `Bearer ${token}`)
         .then(res => {
             const movie = res.body;
             assert.deepEqual(movie, [scarface]);
@@ -99,6 +105,7 @@ describe ('movie', () => {
     it('deletes', done => {
         request
             .delete(`/movies/${scarface._id}`)
+            .set('Authorization', `Bearer ${token}`)
             .then(res => {
                 assert.isOk(res.body, 'deleted');
                 done();
