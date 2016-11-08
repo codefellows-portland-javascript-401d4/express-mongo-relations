@@ -4,11 +4,11 @@
   "description": "Relationship database with mongo/Mongoose/express/node",
   "main": "server.js",
   "scripts": {
-    "pretest": "eslint ./",
-    "test": "mocha ./test/",
-    "test:watch": "mocha ./test/ -w",
-    "start": "eslint ./ && mocha ./test/ && nodemon server.js",
-    "lint": "eslint ./"
+    "pretest": "eslint .",
+    "test": "mocha",
+    "test:watch": "mocha -w",
+    "start": "eslint . && mocha && node server.js",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -22,9 +22,7 @@
   "homepage": "https://github.com/Waxhoya/express-mongo-relations#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
-    "chai-http": "^3.0.0",
     "express": "^4.14.0",
-    "mocha": "^3.1.2",
     "mongoose": "^4.6.6"
   },
   "devDependencies": {
