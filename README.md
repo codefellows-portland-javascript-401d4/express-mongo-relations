@@ -1,22 +1,37 @@
-# express mongo relations database server lab for CodeFellows 401
+# notes server
+### express mongo mongoose database server
+### w/authentication
+### for CodeFellows 401
 
-### Creator
+## Creator
  - Tim Combs
 
-### Project Functionality
+## Project Functionality
   - This is a Code Fellows Lab Assignment to create an http express server that uses mongoDB for persistent storage and retrieval and mongoose as the templating and validation layer - it creates a database for notes, web articles and tags and relations between the collections
   - The app also has an authentication system to sign-in users and allow specific types of users access to specified routes
 
   - The http server runs on localhost:3535
 
-  - server.js is the server, listener and the entry point to the project
-  - app.js is the request handler
-  - notes.js & tags.js & web-articles.js are the routes
-  - errHandler.js handles sending error messages to the client
-  - note.js & tag.js & web-article.js are the schematic models
-  - set-mongoose.js handles connection to the database
+  - server.js - server, listener and the entry point to project
+  - app.js - request handler
+  - notes.js & tags.js & web-articles.js - the data routes
+  - errHandler.js - handles sending error messages to the client
+  - note.js & tag.js & web-article.js - schematic models
+  - set-mongoose.js - handles connection to the database
+  
+  - ensure-auth.js - checks user authentication
+  - ensure-role.js - checks user authorization
+  - token.js - signing up and verifying tokens
+  - user.js - user model
+  - auth.js - routes for authentication and authorization
 
-  - Upon navigating to specific paths, client will be able to get all documents, get specific documents, create new documents, update existing documents and delete specific documents for each collection - notes and tags
+  - Upon navigating to specific paths, client will be able to:
+    - get all documents
+    - get specific documents
+    - create new documents
+    - update existing documents
+    - delete specific documents for each collection - notes, web-articles and tags
+
   - The database methods are implemented in the routes files for each collection: notes.js, web-articles.js & tags.js
     - GET all requests for the /notes, /web-articles or /tags
     - GET requests for the /notes/:id, /web-articles/:id or /tags/:id
@@ -32,7 +47,13 @@
 ### How To Use Codebase
   - This module uses Node, npm and the following modules:
     - net, http, fs, path modules from node
-    - express (for node middleware), morgan (for logging), body-parser (for body parsing), mongoDB (the database), mongoose (for schematic validation, queries and boilerplate)
+      - express (for node middleware)
+      - morgan (for logging)
+      - body-parser (for body parsing)
+      - mongoDB (the database)
+      - mongoose (for schematic validation, queries and boilerplate)
+      - jasonwebtoken (for sign-up/in validation and authorization using tokens)
+      - bcryptjs (for encryption)
     - eslint, mocha, chai, chai-http, nodemon for testing
   - Make sure to run npm install from the directory root to install dependencies
   - Please refer to the package.json for more info
@@ -65,7 +86,10 @@
 
   - navigating to other localhost:3535/<something_else> logs 404 status code and serves a failure message to the client
 
-  
+### Authentication
+  - POST requests for /validate to validate tokens
+  - POST requests for /signup to add user to database and return a token to user
+  - POST requests for /signin based on password and creating token for navigation of API
 
 ### Testing
   - Set Up
