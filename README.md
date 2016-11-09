@@ -86,10 +86,12 @@
 
   - navigating to other localhost:3535/<something_else> logs 404 status code and serves a failure message to the client
 
+
 ### Authentication
   - POST requests for /validate to validate tokens
   - POST requests for /signup to add user to database and return a token to user
   - POST requests for /signin based on password and creating token for navigation of API
+
 
 ### Testing
   - Set Up
