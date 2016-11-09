@@ -83,4 +83,9 @@ describe('team', () => {
             .catch(done);
     });
 
+    after(done => {
+        connection.close( done );
+    });
+
+
 });

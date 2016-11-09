@@ -7,8 +7,8 @@
   },
   "scripts": {
     "start": "env $(cat .env) npm run test && env $(cat .env) nodemon server.js",
-    "test": "MONGODB_URI=mongodb://localhost/fantasy-test mocha",
-    "test:watch": "MONGODB_URI=mongodb://localhost/fantasy-test nodemon --exec mocha"
+    "test": "MONGODB_URI=mongodb://localhost/fantasy mocha",
+    "test:watch": "MONGODB_URI=mongodb://localhost/fantasy nodemon --exec mocha"
   },
   "repository": {
     "type": "git",
