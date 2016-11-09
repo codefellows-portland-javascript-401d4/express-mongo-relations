@@ -10,10 +10,9 @@ const app = require('../lib/app');
 describe('team', () => {
 
     before( done => {
-        const drop = () => connection.db.dropDatabase();
+        const drop = () => connection.db.dropDatabase(done);
         if (connection.readyState === 1) drop();
         else (connection.on('open', drop));
-        done();
     });
 
     const request = chai.request(app);
