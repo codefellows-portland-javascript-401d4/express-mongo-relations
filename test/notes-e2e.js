@@ -38,6 +38,12 @@ describe('notes', () => {
     done: true
   };
 
+  const reminder = {
+    title: 'test',
+    location: 'testville',
+    date: '1/1/01'
+  };
+
 
   it('"GET ALL" before posting', done => {
     request
@@ -85,6 +91,39 @@ describe('notes', () => {
       .catch(done);
   });
 
+  it('adds a reminder', done => {
+    request
+      .post('/reminders')
+      .send(reminder)
+      .then(response => {
+        assert.isOk(response.body);
+        reminder._id = response.body._id;
+        done();
+      })
+      .catch(done);
+  });
+  it('adds reminder Id to resource', done => {
+    cat.reminderId = reminder._id;
+    request
+      .put(`/notes/${cat._id}`)
+      .send(cat)
+      .then(response => {
+        assert.equal(response.body.reminderId, reminder._id);
+        done();
+      })
+      .catch(done);
+  });
+
+  it('GET on resource with reminderId returns relations', done => {
+    request
+      .get(`/notes/${cat._id}`)
+      .then(response => {
+        assert.deepEqual(response.body.reminderId, reminder);
+        cat.reminderId = response.body.reminderId;
+        done();
+      })
+      .catch(done);
+  });
   it('responds correctly to get all', done => {
     request
       .get('/notes')
@@ -127,8 +166,10 @@ describe('notes', () => {
   it('responds to a bad "GET" request', done => {
     request
       .get('/notes/notarealid')
-      .catch(err => {
-        assert.isOk(err);
+      .then(() => done('We should have thrown and error!'))
+      .catch(res => {
+        assert.equal(res.response.res.statusCode, 404);
+        assert.equal(res.response.res.text, '404 ERROR: Bad request path, resource does not exist');
         done();
       });
   });
@@ -136,8 +177,9 @@ describe('notes', () => {
     request
       .post('/notes')
       .send('{title":"test}')
-      .catch(err => {
-        assert.isOk(err);
+      .catch(res => {
+        assert.equal(res.response.res.statusCode, 400);
+        assert.equal(res.response.res.text, '400 ERROR: Invalid data input');
         done();
       });
   });

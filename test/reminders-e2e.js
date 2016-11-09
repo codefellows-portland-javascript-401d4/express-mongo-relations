@@ -143,11 +143,14 @@ describe('reminders', () => {
       })
       .catch(done);
   });
+  
   it('responds to a bad "GET" request', done => {
     request
       .get('/reminders/notarealid')
-      .catch(err => {
-        assert.isOk(err);
+      .then(() => done('We should have caught and error!'))
+      .catch(res => {
+        assert.equal(res.response.res.statusCode, 404);
+        assert.equal(res.response.res.text, '404 ERROR: Bad request path, resource does not exist');
         done();
       });
   });
@@ -155,8 +158,10 @@ describe('reminders', () => {
     request
       .post('/reminders')
       .send('{title":"test}')
-      .catch(err => {
-        assert.isOk(err);
+      .then(() => done('We should have caught and error!'))
+      .catch(res => {
+        assert.equal(res.response.res.text, '400 ERROR: Invalid data input');
+        assert.equal(res.response.res.statusCode, 400);
         done();
       });
   });
