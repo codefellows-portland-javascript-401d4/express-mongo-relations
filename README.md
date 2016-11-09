@@ -9,7 +9,7 @@ This is a NodeJS server using express as a router, it uses a hosted sandbox mong
 
 ####Version V1.0.0
 
-A fully RESTful API with database relationships between Anime characters and Anime shows.
+A fully RESTful API with database relationships between Anime characters and Anime shows. Anime shows
 
 
 ### Mongo Database and Mongoose
@@ -18,7 +18,7 @@ Storage is provided with a Mlab.com hosted Mongodb sandbox. This solution allows
 
 _/lib/setup-mongoose.js line 2:_
 ``` Javascript
-const dbURI = process.env.MONGODB_URI || 'mongodb://Waxhoya:223codefellows@ds143717.mlab.com:43717/anime';
+const dbURI = process.env.MONGODB_URI || 'mongodb://USER:PASSWORD@ds143717.mlab.com:43717/anime';
 ```
 
 
