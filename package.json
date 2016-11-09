@@ -4,11 +4,11 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-      "lint": "eslint **/*.js",
-      "pretest": "npm run lint",
-      "start": "DEBUG=myapp.* nodemon index.js",
-      "test": "MONGODB_URI=mongodb://localhost/myCities-test mocha",
-      "test:watch": "MONGODB_URI=mongodb://localhost/myCities-test nodemon --exec mocha"
+    "lint": "eslint **/*.js",
+    "pretest": "npm run lint",
+    "start": "DEBUG=myapp.* nodemon index.js",
+    "test": "MONGODB_URI=mongodb://localhost/myCities-test mocha",
+    "test:watch": "MONGODB_URI=mongodb://localhost/myCities-test nodemon --exec mocha"
   },
   "repository": {
     "type": "git",
@@ -21,17 +21,16 @@
   },
   "homepage": "https://github.com/codefellows-portland-javascript-401d4/express-single-resource#readme",
   "dependencies": {
+    "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
-    "mongoose": "^4.6.5",
-    "sander": "^0.5.1"
+    "jsonwebtoken": "^7.1.9",
+    "mongoose": "^4.6.5"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
     "eslint": "^3.9.1",
-    "mkdirp": "^0.5.1",
-    "mocha": "^3.1.2",
-    "rimraf": "^2.5.4"
+    "mocha": "^3.1.2"
   }
 }
