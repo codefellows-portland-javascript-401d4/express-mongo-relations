@@ -36,7 +36,6 @@ describe('player', () => {
             .get('/api/players')
             .set('Authorization', `Bearer ${token}`)
             .then(res => {
-                console.log('this is it', res.body);
                 assert.deepEqual(res.body, []);
                 done();
             })
