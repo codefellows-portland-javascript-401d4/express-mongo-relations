@@ -5,6 +5,8 @@
 
 ### Project Functionality
   - This is a Code Fellows Lab Assignment to create an http express server that uses mongoDB for persistent storage and retrieval and mongoose as the templating and validation layer - it creates a database for notes, web articles and tags and relations between the collections
+  - The app also has an authentication system to sign-in users and allow specific types of users access to specified routes
+
   - The http server runs on localhost:3535
 
   - server.js is the server, listener and the entry point to the project
@@ -62,6 +64,7 @@
   - sending a DELETE request to localhost:3535/<notes_webarticles_tags>/<specific_note_or_webarticle_or_tag> deletes the note, web article or tag from the database and displays 'Your file has been deleted'
 
   - navigating to other localhost:3535/<something_else> logs 404 status code and serves a failure message to the client
+
   
 
 ### Testing
