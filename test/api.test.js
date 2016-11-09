@@ -168,12 +168,16 @@ describe('e2e testing the note model', () => {
       .delete(`/notes/${noteTested._id}`)
       .set('Authorization', `Bearer ${token}`)
       .then(() => {
-        request
+        return request
           .get(`/notes/${noteTested._id}`)
-          .then((res) => {
-            expect(res.body.data).to.deep.equal(undefined);
+          .set('Authorization', `Bearer ${token}`)
+          .then(() => {
+            done('should not be called');
+          })
+          .catch((err) => {
+            expect(err.response.error.text).to.deep.equal('{"error":"That note does not exist. Perhaps you meant to create a new note?"}');
+            done();
           });
-        done();
       })
       .catch(done);
   });
@@ -296,12 +300,15 @@ describe('e2e testing the web article model', () => {
     request
       .delete(`/web-articles/${webTested._id}`)
       .then(() => {
-        request
+        return request
           .get(`/web-articles/${webTested._id}`)
-          .then((res) => {
-            expect(res.body.data).to.deep.equal(undefined);
+          .then(() => {
+            done('not getting called');
+          })
+          .catch((err) => {
+            expect(err.response.error.text).to.equal('{"error":"That web article does not exist. Perhaps you meant to add a new web article?"}');
+            done();
           });
-        done();
       })
       .catch(done);
   });
@@ -407,58 +414,49 @@ describe('e2e testing the tag model', () => {
       tagId: tagTested._id
     };
 
-    request
+    const expVal = { 
+      message: 'Your tag has been found',
+      data: {
+        _id: tagTested._id,
+        name: 'tag for testing',
+        description: 'test and learn',
+        heat: 'warm',
+        __v: 0,
+        notes: [testNote],
+        webArticles: [testWebArticle]
+      }
+    };
+
+    const notesPromise = request
       .post('/notes')
       .set('Authorization', `Bearer ${tagToken}`)
       .send(testNote)
       .then((res) => {
         const note = res.body;
-        expect(note.data._id).to.be.ok;
-        testNote.__v = 0;
+        delete testNote.tagId;
         testNote._id = note.data._id;
-      })
+      });
+
+    const articlesPromise = request
+      .post('/web-articles')
+      .set('Authorization', `Bearer ${tagToken}`)
+      .send(testWebArticle)
+      .then((res) => {
+        const webArticle = res.body;
+        delete testWebArticle.tagId;
+        testWebArticle._id = webArticle.data._id;
+      });
+
+        
+    Promise.all([articlesPromise, notesPromise])
       .then(() => {
-        request
-          .post('/web-articles')
-          .set('Authorization', `Bearer ${tagToken}`)
-          .send(testWebArticle)
-          .then((res) => {
-            const webArticle = res.body;
-            expect(webArticle.data._id).to.be.ok;
-            testWebArticle.__v = 0;
-            testWebArticle._id = webArticle.data._id;
-          })
-          .catch(done);
-      })
-      .then(() => {
-        request
+        return request
           .get(`/tags/${tagTested._id}`)
-          .set('Authorization', `Bearer ${tagToken}`)
-          .then((res) => {
-            let expVal = { 
-              message: 'Your tag has been found',
-              data: {
-                _id: tagTested._id,
-                name: 'tag for testing',
-                description: 'test and learn',
-                heat: 'warm',
-                __v: 0,
-                notes: [{
-                  '_id': testNote._id,
-                  'text': 'the test note text',
-                  'title': 'test note to show population'
-                }],
-                webArticles: [{
-                  '_id': testWebArticle._id,
-                  'description': 'a test description',
-                  'title': 'test article to show population',
-                  'url': 'http:www.test.this'}
-                ]}
-            };
-            expect(expVal).to.deep.equal(res.body);
-            done();
-          })
-          .catch(done);
+          .set('Authorization', `Bearer ${tagToken}`);
+      })
+      .then((res) => {
+        expect(res.body).to.deep.equal(expVal);
+        done();
       })
       .catch(done);
   });
@@ -504,13 +502,16 @@ describe('e2e testing the tag model', () => {
       .delete(`/tags/${tagTested._id}`)
       .set('Authorization', `Bearer ${tagToken}`)
       .then(() => {
-        request
+        return request
           .get(`/tags/${tagTested._id}`)
           .set('Authorization', `Bearer ${tagToken}`)
-          .then((res) => {
-            expect(res.body.data).to.deep.equal(undefined);
+          .then(() => {
+            done('not getting called');
+          })
+          .catch((err) => {
+            expect(err.response.error.text).to.equal('{"error":"That tag does not exist. Perhaps you meant to create a new tag?"}');
+            done();
           });
-        done();
       })
       .catch(done);
   });

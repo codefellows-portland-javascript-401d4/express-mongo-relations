@@ -18,16 +18,16 @@ describe('authentication/authorization testing', () => {
     else connection.on('open', drop);
   });
 
-  describe('unauthorized', () => {
+  describe('token authorization check', () => {
     it('returns status = 400 when no token exists', (done) =>{
       request
         .get('/notes')
         .then((res) => { //eslint-disable-line
           done('status should != 200');
         })
-        .catch((res) => {
-          expect(res.status).to.deep.equal(400);
-          expect(res.response.body.error).to.equal('unauthorized, no token provided');
+        .catch((err) => {
+          expect(err.status).to.deep.equal(400);
+          expect(err.response.body.error).to.equal('unauthorized, no token provided');
           done();
         })
         .catch(done);
@@ -121,7 +121,7 @@ describe('authentication/authorization testing', () => {
         .post('/auth/signin')
         .send(user)
         .then((res) => {
-          expect(res.body.token).to.deep.equal(token);
+          expect(res.body.token).to.be.ok;
         })
         //.then(done, done); //this code is the same as the following 2 blocks
         .then(() => {
@@ -165,6 +165,7 @@ describe('authentication/authorization testing', () => {
       const anotherUser = {
         username: 'Fresca Perdoni',
         password: '123456',
+        role: ['stupid']
       };
 
       let anotherToken = '';
