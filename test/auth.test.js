@@ -44,7 +44,11 @@ describe('user management', () => {
 
     const user = {
         username: 'Viper',
-        password: 'password'
+        password: 'password',
+        roles: 'admin'
+    };
+    const char = {
+        name: 'testChar',
     };
     let token = '';
 
@@ -89,9 +93,24 @@ describe('user management', () => {
             .then(done, done);
     });
 
-    // it('blocks secure route', done => {
-    //     request
-    //         .request('/characters')
-    //         .then()
-    // });
+    it('blocks secure route', done => {
+        badRequest('/characters', null, 'unauthorized, no token provided', done);
+    });
+
+    it('authenticates with token', done => {
+        request
+            .get('/characters')
+            .set('Authorization', token)
+            .then(res => assert.equal(res.status, 200))
+            .then(done, done);
+    });
+
+    it('authorizes priviliged routes with token', done => {
+        request
+            .post('/characters')
+            .set('Authorization', token)
+            .send(char)
+            .then(res => assert.equal(res.status, 200))
+            .then(done, done);
+    });
 });

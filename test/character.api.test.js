@@ -21,7 +21,7 @@ describe('character end to end test', () => {
     before(done => {
         request
             .post('/auth/signup')
-            .send({ username: 'testuser', password: 'testpassword' })
+            .send({ username: 'testuser', password: 'testpassword', roles: 'admin' })
             .then(res => assert.ok(token = res.body.token))
             .then(done, done);
     });
