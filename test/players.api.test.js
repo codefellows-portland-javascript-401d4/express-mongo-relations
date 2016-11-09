@@ -13,6 +13,7 @@ describe('player', () => {
         const drop = () => connection.db.dropDatabase(done);
         if (connection.readyState === 1) drop();
         else (connection.on('open', drop));
+        done();
     });
 
     const request = chai.request(app);
