@@ -2,7 +2,7 @@
   "name": "express-mongo-relations",
   "version": "1.0.0",
   "description": "express, mongo, mongoose http multi-resource server",
-  "main": "index.js",
+  "main": "server.js",
   "directories": {
     "test": "test"
   },
@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "test": "MONGODB_URI=mongodb://localhost/exmorel-test-db mocha",
     "test:watch": "npm run test -- -w",
-    "start": "MONGODB_URI=mongodb://localhost/exmorel-db nodemon index.js"
+    "start": "MONGODB_URI=mongodb://localhost/exmorel-db nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -32,8 +32,10 @@
     "superagent": "^2.3.0"
   },
   "dependencies": {
+    "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
     "mongoose": "^4.6.5",
     "morgan": "^1.7.0"
   }
