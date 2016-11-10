@@ -34,9 +34,27 @@ describe('city e2e test server functionality', () => {
     }
   });
 
+
+  let token = '';
+
+  const user = {
+    username: 'moreAwesomeUser',
+    password: 'moreAwesomePassword'
+  };
+
+  it('signup', done => {
+    req
+      .post('/auth/signup')
+      .send(user)
+      .then(res => assert.isOk( token = res.body.token ))
+      .then( done, done );
+  });
+
+
   it('clears the database before starting', done => {
     req
       .get('/cities')
+      .set('authorization', `Bearer ${token}`)
       .then(res => {
         expect(res).status(200);
         assert.deepEqual(res.body, []);
@@ -49,6 +67,7 @@ describe('city e2e test server functionality', () => {
     req
       .post('/cities')
       .set('Content-Type', 'application/json')
+      .set('authorization', `Bearer ${token}`)
       .send(stringPortland)
       .then(res => {
         portlandPostId = JSON.parse(res.text)._id;
@@ -61,6 +80,8 @@ describe('city e2e test server functionality', () => {
   it('GETs files in directory after initial POST', done => {
     req
       .get('/cities')
+      .set('authorization', `Bearer ${token}`)
+
       .then(res => {
         expect(res).status(200);
         assert.notEqual(JSON.parse(res.text).length, 0);
@@ -73,6 +94,8 @@ describe('city e2e test server functionality', () => {
   it('GETs a single file', done => {
     req
       .get('/cities/' + portlandPostId)
+      .set('authorization', `Bearer ${token}`)
+
       .then(res => {
         expect(res).status(200);
         assert.equal(JSON.parse(res.text).name, 'portland');
@@ -85,6 +108,8 @@ describe('city e2e test server functionality', () => {
     req
       .put('/cities/' + portlandPostId)
       .set('Content-Type', 'application/json')
+      .set('authorization', `Bearer ${token}`)
+
       .send(stringCupertino)
       .then(res => {
         expect(res).status(200);

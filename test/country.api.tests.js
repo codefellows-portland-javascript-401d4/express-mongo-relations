@@ -32,9 +32,28 @@ describe('country e2e test server functionality', () => {
   });
 
 
+  let token = '';
+
+  const user = {
+    username: 'moreAwesomeUser2',
+    password: 'moreAwesomePassword2',
+    roles: ['adminCountry']
+  };
+
+  it('signup', done => {
+    req
+        .post('/auth/signup')
+        .send(user)
+        .then(res => assert.isOk( token = res.body.token ))
+        .then( done, done );
+  });
+
+
   it('clears database before starting', done => {
     req
       .get('/countries')
+      .set('authorization', `Bearer ${token}`)
+
       .then(res => {
         expect(res).status(200);
         assert.deepEqual(res.body, []);
@@ -48,6 +67,8 @@ describe('country e2e test server functionality', () => {
     req
               .post('/countries')
               .set('Content-Type', 'application/json')
+              .set('authorization', `Bearer ${token}`)
+
               .send(stringAmerica)
               .then(res => {
                 americaPostId = JSON.parse(res.text)._id;
@@ -60,6 +81,8 @@ describe('country e2e test server functionality', () => {
   it('GETs files in directory after initial POST', done => {
     req
               .get('/countries')
+              .set('authorization', `Bearer ${token}`)
+
               .then(res => {
                 expect(res).status(200);
                 assert.notEqual(JSON.parse(res.text).length, 0);
@@ -72,6 +95,8 @@ describe('country e2e test server functionality', () => {
   it('GETs a single file', done => {
     req
               .get('/countries/' + americaPostId)
+              .set('authorization', `Bearer ${token}`)
+
               .then(res => {
                 expect(res).status(200);
                 assert.equal(JSON.parse(res.text).name, 'america');
@@ -82,27 +107,30 @@ describe('country e2e test server functionality', () => {
 
   it('replaces a file using PUT', done => {
     req
-              .put('/countries/' + americaPostId)
-              .set('Content-Type', 'application/json')
-              .send(stringAmerica)
-              .then(res => {
-                expect(res).status(200);
-                assert.equal(JSON.parse(res.text).name, 'america');
-                done();
-              })
-              .catch(done);
+      .put('/countries/' + americaPostId)
+      .set('Content-Type', 'application/json')
+      .set('authorization', `Bearer ${token}`)
+
+      .send(stringAmerica)
+      .then(res => {
+        expect(res).status(200);
+        assert.equal(JSON.parse(res.text).name, 'america');
+        done();
+      })
+      .catch(done);
   });
 
   it('DELETEs a file', done => {
     req
-              .del('/countries/' + americaPostId)
-              .then(res => {
-                expect(res).status(200);
-                assert.include(res.text, 'america');
+    .del('/countries/' + americaPostId)
+    .set('authorization', `Bearer ${token}`)
+    .then(res => {
+      expect(res).status(200);
+      assert.include(res.text, 'america');
 
-                // assert.equal(res.text, '{"ok":1,"n":1}');
-                done();
-              })
-              .catch(done);
+      // assert.equal(res.text, '{"ok":1,"n":1}');
+      done();
+    })
+    .catch(done);
   });
 });

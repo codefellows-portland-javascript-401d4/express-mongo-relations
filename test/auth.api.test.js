@@ -20,7 +20,7 @@ describe('auth', () => {
     it('400 with no token', done => {
       request
         .get('/cities')
-        .then(res => done('status should not be 200'))
+        .then(() => done('status should not be 200'))
         .catch(res => {
           assert.equal(res.status, 400);
           assert.equal(res.response.body.error, 'unauthorized, invalid token');
@@ -32,11 +32,11 @@ describe('auth', () => {
     it('403 with invalid token', done => {
       request
         .get('/cities')
-        .set('Authorization', 'Bearer notaToken')
-        .then(res => done('status should not be 200'))
+        .set('authorization', 'Bearer notaToken')
+        .then(() => done('status should not be 200'))
         .catch(res => {
           assert.equal(res.status, 403);
-          assert.equal(res.response.body.error, 'unauthorized, invalid token');
+          assert.equal(res.response.body.error, 'unauthorized, invalid token: ');
           done();
         })
         .catch(done);
@@ -54,7 +54,7 @@ describe('auth', () => {
       request
         .post(url)
         .send(send)
-        .then(res => done('status should not be 200'))
+        .then(() => done('status should not be 200'))
         .catch(res => {
           assert.equal(res.status, 400);
           assert.equal(res.response.body.error, error);
@@ -93,12 +93,29 @@ describe('auth', () => {
         .then(done, done);
     });
 
-    it('signin', done => {
+    // .set('authorization', `Bearer ${token}`)
+
+// signin and get a token back
+// make a new request with the token to the validate api path
+// expect this request to return true
+
+    it('signin', function(done){
+      this.timeout(10000);
       request
         .post('/auth/signin')
         .send(user)
-        .then(res => assert.equal(res.body.token, token))
-        .then(done, done);
+        .then(res => {
+          request
+            .post('/auth/validate')
+            .set('authorization', `Bearer ${res.body.token}`)
+            .then(res => {
+              assert.isOk(res.body.valid);
+              done();
+            });
+        })
+        .catch(done);
+          // assert.equal(res.body.token, token}))
+        // .then(done, done);
         // .then((err, res) => {
         // if(err)done(err);
         // done();
