@@ -1,7 +1,9 @@
-# Express mongo relations
+# Express mongo app 
 
 * Code Fellows lab assignment
-* Added relations between resources to Express app backed by Mongo using Mongoose 
+* Relations between resources to Express app backed by Mongo using Mongoose 
+* Includes endpoints for signing up (registering) and signing in (log in)
+* Resources protected by requiring a valid JWT
 
 ## MIT License
 
