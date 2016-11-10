@@ -19,7 +19,10 @@
   },
   "homepage": "https://github.com/viper86/express-mongo-relations#readme",
   "dependencies": {
+    "bcryptjs": "^2.3.0",
+    "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
     "mongoose": "^4.6.6"
   },
   "devDependencies": {
@@ -27,6 +30,7 @@
     "chai-http": "^3.0.0",
     "eslint": "^3.9.1",
     "mocha": "^3.1.2",
+    "morgan": "^1.7.0",
     "nodemon": "^1.11.0"
   }
 }
