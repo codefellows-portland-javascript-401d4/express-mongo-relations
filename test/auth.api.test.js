@@ -100,7 +100,6 @@ describe('auth', () => {
 // expect this request to return true
 
     it('signin', function(done){
-      this.timeout(10000);
       request
         .post('/auth/signin')
         .send(user)
