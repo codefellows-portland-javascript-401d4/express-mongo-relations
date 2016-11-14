@@ -95,9 +95,43 @@ describe ('riders API E2E tesing', () => {
       });
   });
 
+  it ('POST /api/riders without admin privilege should fail', (done) => {
+    request
+      .post('/api/riders')
+      .send({ name: 'Fred Phred', nationality: 'French' })
+      .then(() => {
+        done('Shouldn\'t be able to POST without "admin" privilege');
+      })
+      .catch((err) => {
+        expect(err).to.have.status(400);
+        done();
+      });
+  });
+
+  const adminUser = {
+    username: 'adminuser',
+    password: 'multipass',
+    roles: ['admin']
+  };
+
+  let token = ''; // eslint-disable-line no-unused-vars
+
+  it ('creates an admin user', (done) => {
+    request
+      .post('/api/auth/register')
+      .send(adminUser)
+      .then((res) => {
+        token = res.body.token;
+        done();
+      })
+      .catch(done);
+  });
+
   it ('POSTs a bunch of riders', (done) => {
     Promise.all(
-      test_riders.map((rider) => { return request.post('/api/riders').send(rider); })
+      test_riders.map((rider) => { 
+        return request.post('/api/riders').set('Authorization', `Bearer ${token}`).send(rider);
+      })
     )
     .then((results) => {
       results.forEach((item, index) => {
@@ -108,7 +142,6 @@ describe ('riders API E2E tesing', () => {
     })
     .catch(done);
   });
-
 
   it ('GET / returns all riders after POST', (done) => {
 
@@ -159,6 +192,7 @@ describe ('riders API E2E tesing', () => {
   it ('PUT /api/riders/:id with info object updates specific rider info given id', (done) => {
     request
       .put(`/api/riders/${test_riders[1]._id}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({ weight: 90 })
       .then(() => {
         request
@@ -172,9 +206,40 @@ describe ('riders API E2E tesing', () => {
       .catch(done);
   });
 
+  it ('DELETE /api/riders/:id without "superuser" privilege should fail', (done) => {
+    request
+      .delete(`/api/riders/${test_riders[1]._id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .then(() => {
+        done('Shouldn\'t be able to DELETE without "superuser" privilege');
+      })
+      .catch((err) => {
+        expect(err).to.have.status(400);
+        done();
+      });
+  });
+
+  const superUser = {
+    username: 'superuser',
+    password: 'supersecretpassword',
+    roles: ['admin', 'superuser']
+  };
+
+  it ('creates a super user', (done) => {
+    request
+      .post('/api/auth/register')
+      .send(superUser)
+      .then((res) => {
+        token = res.body.token;
+        done();
+      })
+      .catch(done);
+  });
+
   it ('DELETE /api/riders/:id deletes specific rider given id', (done) => {
     request
       .delete(`/api/riders/${test_riders[1]._id}`)
+      .set('Authorization', `Bearer ${token}`)
       .then(() => {
         request
           .get(`/api/riders/${test_riders[1]._id}`)

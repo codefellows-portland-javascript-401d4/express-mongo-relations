@@ -74,9 +74,29 @@ describe ('teams API E2E testing', () => {
       .catch(done);
   });
 
+  const testuser = {
+    username: 'adminuser',
+    password: 'multipass'
+  };
+
+  let token = ''; // eslint-disable-line no-unused-vars
+
+  it ('signs in an admin test user', (done) => {
+    request
+      .post('/api/auth/signin')
+      .send(testuser)
+      .then((res) => {
+        token = res.body.token;
+        done();
+      })
+      .catch(done);
+  });
+
   it ('POSTs a bunch of teams', (done) => {
     Promise.all(
-      test_teams.map((team) => { return request.post('/api/teams').send(team); })
+      test_teams.map((team) => { 
+        return request.post('/api/teams').set('Authorization', `Bearer ${token}`).send(team);
+      })
     )
     .then((results) => {
       results.forEach((item, index) => {
@@ -124,7 +144,9 @@ describe ('teams API E2E testing', () => {
 
     Promise.all(
       assignments.map((assignment) => {
-        return request.put(`/api/teams/${test_teams[assignment[1]]._id}/rider/${test_riders[assignment[0]]._id}`);
+        return request
+          .put(`/api/teams/${test_teams[assignment[1]]._id}/rider/${test_riders[assignment[0]]._id}`)
+          .set('Authorization', `Bearer ${token}`);
       })
     )
       .then(() => {
@@ -135,24 +157,10 @@ describe ('teams API E2E testing', () => {
             done();
           })
           .catch(done);
-      });
+      })
+      .catch(done);
 
   });
-
-  // it ('PUT two more riders on the same team as before', (done) => {
-
-  //   request
-  //     .put(`/api/teams/${test_teams[0]._id}/rider/${test_riders[2]._id}`)
-  //     .then(() => {
-  //       request
-  //         .put(`/api/teams/${test_teams[0]._id}/rider/${test_riders[6]._id}`)
-  //         .then(() => {
-  //           done();
-  //         })
-  //         .catch(done);
-  //     })
-  //     .catch(done);
-  // });
 
   it ('GET /:team_id/riders lists the specified team along with the riders on it', (done) => {
   
@@ -174,6 +182,7 @@ describe ('teams API E2E testing', () => {
   it ('updates specific team info given id', (done) => {
     request
       .put(`/api/teams/${test_teams[0]._id}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({ sponsor: 'Columbia Sportswear' })
       .then(() => {
         request
@@ -187,9 +196,26 @@ describe ('teams API E2E testing', () => {
       .catch(done);
   });
 
+  const superuser = {
+    username: 'superuser',
+    password: 'supersecretpassword'
+  };
+
+  it ('signs in a super user', (done) => {
+    request
+      .post('/api/auth/signin')
+      .send(superuser)
+      .then((res) => {
+        token = res.body.token;
+        done();
+      })
+      .catch(done);
+  });
+
   it ('deletes specific team given id', (done) => {
     request
       .delete(`/api/teams/${test_teams[1]._id}`)
+      .set('Authorization', `Bearer ${token}`)
       .then(() => {
         request
           .get(`/api/riders/${test_teams[1]._id}`)
@@ -226,8 +252,8 @@ describe ('teams API E2E testing', () => {
       .catch(done);
   });
   
-  after((done) => {
-    connection.close(done);
-  });
+  // after((done) => {
+  //   connection.close(done);
+  // });
 
 });
