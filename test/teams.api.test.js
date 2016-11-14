@@ -3,88 +3,89 @@ const chaiHttp = require('chai-http');
 const assert = chai.assert;
 chai.use(chaiHttp);
 
-const connection = require( '../lib/setup_mongoose');
+const connection = require('../lib/setup_mongoose');
 
-const app = require( '../lib/app' );
+const app = require('../lib/app');
 
-describe( 'team', () => {
+describe('team', () => {
 
     before( done => {
-        const CONNECTED = 1;
-        if (connection.readyState === CONNECTED) dropCollection();
-        else connection.on('open', dropCollection);
-
-        function dropCollection(){
-            const name = 'teams';
-            connection.db
-						.listCollections({ name })
-						.next( (err, collinfo) => {
-    if (!collinfo) return done();
-    connection.db.dropCollection(name, done);
-});
-        }
+        const drop = () => connection.db.dropDatabase(done);
+        if (connection.readyState === 1) drop();
+        else (connection.on('open', drop));
     });
 
     const request = chai.request(app);
+    let token = '';
 
-    const snap = {
-        teamName: 'Oh Snap!'
+    before( done => {
+        request
+            .post('/api/auth/signup')
+            .send({ username: 'tester2', password: 'pass1234', roles: ['admin']})
+            .then(res => assert.ok(token = res.body.token))
+            .then(done, done);
+    });
+
+    let snap = {
+        teamName: 'Oh Snap!',
+        wins: 5
     };
 
-    it( '/GET all', done => {
+
+    it('/POST', done => {
         request
-				.get( '/api/teams' )
-				.then( res => {
-    assert.deepEqual( res.body, [] );
-    done();
-})
-			.catch( done );
+            .post('/api/teams')
+            .set('Authorization', `Bearer ${token}`)
+            .send(snap)
+            .then(res => {
+                const team = res.body;
+                assert.ok(team._id);
+                snap = team;
+                done();
+            })
+            .catch(done);
+    });
+    //
+    it('/GET by id', done => {
+        request
+            .get(`/api/teams/${snap._id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .then(res => {
+                const team = res.body;
+                assert.deepEqual = (team, snap);
+                done();
+            })
+            .catch(done);
     });
 
-    it( '/POST', done => {
+    it('/GET all after a post', done => {
         request
-				.post( '/api/teams' )
-				.send( snap )
-				.then( res => {
-    const team = res.body;
-    // console.log(team);
-    assert.ok( team._id );
-    snap.teamName = team.teamName;
-    snap.__v = 0;
-    snap._id = team._id;
-    snap.rosterId = [];
-    done();
-})
-			.catch( done );
-
+            .get('/api/teams/')
+            .set('Authorization', `Bearer ${token}`)
+            .then(res => {
+                assert.equal(res.body.length, 1);
+                assert.equal(res.body[0]._id, snap._id);
+                done();
+            })
+            .catch(done);
     });
 
-    it( '/GET by id', done => {
+    it('/GET where wins is a number', done => {
         request
-    .get( `/api/teams/${snap._id}` )
-			.then( res => {
-    const team = res.body;
-    assert.deepEqual( team, snap );
-    done();
-})
-			.catch( done );
+            .get('/api/teams')
+            .set('Authorization', `Bearer ${token}`)
+            .query({ position: 5})
+            .then(res => {
+                assert.equal(res.body.length, 1);
+                assert.equal(res.body[0]._id, snap._id);
+                done();
+            })
+            .catch(done);
     });
 
-// TROUBLE WITH THIS TEST
-//     it( '/GET all after post', done => {
-//         request
-// 			.get( '/api/teams' )
-// 			.then( res => {
-//     console.log(res.body);
-//     console.log( [snap] );
-//     assert.equal( res.body, [ snap ] );
-//
-//     done();
-// })
-// 			.catch( done );
-//     });
-
-    after( done => {
+    after(done => {
         connection.close( done );
     });
+
+
 });

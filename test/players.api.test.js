@@ -3,68 +3,94 @@ const chaiHttp = require('chai-http');
 const assert = chai.assert;
 chai.use(chaiHttp);
 
-const connection = require( '../lib/setup_mongoose');
+const connection = require('../lib/setup_mongoose');
 
-const app = require( '../lib/app' );
+const app = require('../lib/app');
 
-describe( 'player', () => {
+describe('player', () => {
 
     before( done => {
-        const CONNECTED = 1;
-        if (connection.readyState === CONNECTED) dropCollection();
-        else connection.on('open', dropCollection);
-
-        function dropCollection(){
-            const name = 'players';
-            connection.db
-						.listCollections({ name })
-						.next( (err, collinfo) => {
-    if (!collinfo) return done();
-    connection.db.dropCollection(name, done);
-});
-        }
+        const drop = () => connection.db.dropDatabase(done);
+        if (connection.readyState === 1) drop();
+        else (connection.on('open', drop));
     });
 
     const request = chai.request(app);
+    let token = '';
 
-    const antonio = {
-        playerName: 'Antonio Brown'
+    before( done => {
+        request
+            .post('/api/auth/signup')
+            .send({ username: 'tester', password: 'pass1234'})
+            .then(res => assert.ok(token = res.body.token))
+            .then(done, done);
+    });
+
+    let antonio = {
+        playerName: 'Antonio Brown',
+        position: 'WR'
     };
 
-    it( '/GET all', done => {
+    it('/GET all', done => {
         request
-				.get( '/api/players' )
-				.then( res => {
-    assert.deepEqual( res.body, [] );
-    done();
-})
-			.catch( done );
+            .get('/api/players')
+            .set('Authorization', `Bearer ${token}`)
+            .then(res => {
+                assert.deepEqual(res.body, []);
+                done();
+            })
+            .catch(done);
     });
 
-    it( '/POST', done => {
+    it('/POST', done => {
         request
-				.post( '/api/players' )
-				.send( antonio )
-				.then( res => {
-    const player = res.body;
-    assert.ok( player._id );
-    antonio.__v = 0;
-    antonio._id = player._id;
-    done();
-})
-			.catch( done );
-
+            .post('/api/players')
+            .set('Authorization', `Bearer ${token}`)
+            .send(antonio)
+            .then(res => {
+                const player = res.body;
+                assert.ok(player._id);
+                antonio = player;
+                done();
+            })
+            .catch(done);
     });
 
-    it( '/GET by id', done => {
+    it('/GET by id', done => {
         request
-    .get( `/api/players/${antonio._id}` )
-			.then( res => {
-    const player = res.body;
-    assert.deepEqual( player, antonio );
-    done();
-})
-			.catch( done );
+            .get(`/api/players/${antonio._id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .then(res => {
+                const player = res.body;
+                assert.deepEqual = (player, antonio);
+                done();
+            })
+            .catch(done);
+    });
+
+    it('/GET all after a post', done => {
+        request
+            .get('/api/players/')
+            .set('Authorization', `Bearer ${token}`)
+            .then(res => {
+                assert.equal(res.body.length, 1);
+                assert.equal(res.body[0]._id, antonio._id);
+                done();
+            })
+            .catch(done);
+    });
+
+    it('/GET where position is WR', done => {
+        request
+            .get('/api/players')
+            .set('Authorization', `Bearer ${token}`)
+            .query({ position: 'WR'})
+            .then(res => {
+                assert.equal(res.body.length, 1);
+                assert.equal(res.body[0]._id, antonio._id);
+                done();
+            })
+            .catch(done);
     });
 
 });
