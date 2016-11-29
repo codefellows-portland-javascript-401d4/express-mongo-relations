@@ -11,7 +11,7 @@
   - The app also has an authentication system to sign-in users and allow specific types of users access to specified routes
 
   - The http server runs on localhost:3535
-
+  
   - server.js - server, listener and the entry point to project
   - app.js - request handler
   - notes.js & tags.js & web-articles.js - the data routes
@@ -32,15 +32,6 @@
     - update existing documents
     - delete specific documents for each collection - notes, web-articles and tags
 
-  - The database methods are implemented in the routes files for each collection: notes.js, web-articles.js & tags.js
-    - GET all requests for the /notes, /web-articles or /tags
-    - GET requests for the /notes/:id, /web-articles/:id or /tags/:id
-    - GET requests for the last 5 updated records for /notes
-    - GET requests for specific key=value pairs
-    - POST requests for the /notes/:id, /web-articles/:id or /tags/:id
-    - PUT requests to overwrite for the /notes/:id, /web-articles/:id or /tags/:id
-    - DELETE requests for the /notes/:id, /web-articles/:id or /tags/:id
-  
   - Different responses and errors will be written to the browser and/or logged to the console dependent on specific path &/or request method
   - Notes & tags & web articles are stored and returned to client as JSON files
 
