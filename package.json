@@ -1,0 +1,38 @@
+{
+  "name": "express-mongo-relations",
+  "version": "1.0.0",
+  "description": "Add relational functionality to express-mongo-resources",
+  "main": "server.js",
+ "scripts": {
+    "test": "MONGODB_URI=mongodb://localhost/resources-test mocha",
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/txtincorporated/express-mongo-relations.git"
+  },
+  "keywords": [
+    "mongoDB",
+    "populate"
+  ],
+  "author": "Nathan P. Keene",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/txtincorporated/express-mongo-relations/issues"
+  },
+  "homepage": "https://github.com/txtincorporated/express-mongo-relations#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.9.1",
+    "mocha": "^3.1.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "dotenv": "^2.0.0",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.6"
+  }
+}
