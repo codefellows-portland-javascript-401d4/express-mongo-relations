@@ -1,0 +1,41 @@
+{
+  "name": "express-mongo-relations",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "npm run test && node server.js",
+    "pretest": "npm run lint",
+    "test": "mocha",
+    "test:watch": "mocha -- -w",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mizutombo/express-mongo-relations.git"
+  },
+  "keywords": [
+    "http",
+    "server"
+  ],
+  "author": "Tom Shultz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mizutombo/express-mongo-relations"
+  },
+  "homepage": "https://github.com/mizutombo/express-mongo-relations#LAB",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.8.1",
+    "events": "^1.1.1",
+    "mocha": "^3.1.2",
+    "nodemon": "^1.11.0",
+    "rimraf": "^2.5.4"
+  }
+}
