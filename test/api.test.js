@@ -14,17 +14,32 @@ const connection = require('../lib/set-mongoose');
 const request = chai.request(app);
 
 describe('e2e testing for app', () => {
+  before((done) => {
+    const CONNECTED = 1;
+    if (connection.readyState === CONNECTED) dropCollection();
+    else connection.on('open', dropCollection);
+
+    function dropCollection() {
+      const name = 'users';
+      connection.db
+        .listCollections({name})
+        .next((err, callinfo) => {
+          if (!callinfo) return done();
+          connection.db.dropCollection(name, done);
+        });
+    }
+  });
 
   it('fails when navigating to an unknown path', (done) => {
     request
       .get('/nowhere/fast')
       .then(() => {
-        done();
+        done('should never be called');
       })
-      .catch((err) => {
-        expect(err).to.have.status(400);
-        expect(err.message).to.be.equal('no path by that name, please check you map.');
-        done(err);
+      .catch((res) => {
+        expect(res).to.have.status(400);
+        expect(res.response.body.error).to.deep.equal('no path by that name, please check your map.');
+        done();
       });
   });
 
@@ -47,6 +62,25 @@ describe('e2e testing the note model', () => {
     }
   });
 
+  const user = {
+    username: 'Gesta Persona',
+    password: 'p4$$w04d'
+  };
+
+  let token = '';
+
+  it('on a sign-up generate a token for notes testing', (done) => {
+    request
+      .post('/auth/signup')
+      .send(user)
+      .then((res) => {
+        token = res.body.token;
+        expect(token).to.be.ok;
+      })
+      //what is this?
+      .then(done, done);
+  });
+
   const noteTested =
     {
       title: 'note for testing',
@@ -57,6 +91,7 @@ describe('e2e testing the note model', () => {
   it('returns status code = 200 on successful requests', (done) => {
     request
       .get('/notes')
+      .set('Authorization', `Bearer ${token}`)
       .then((res) => {
         expect(res).to.have.status(200);
         done();
@@ -69,6 +104,7 @@ describe('e2e testing the note model', () => {
   it('navigates to POST and stashes a new note', (done) => {
     request
       .post('/notes')
+      .set('Authorization', `Bearer ${token}`)
       .send(noteTested)
       .then((res) => {
         const note = res.body;
@@ -83,6 +119,7 @@ describe('e2e testing the note model', () => {
   it('navigates to the root and GETs all notes', (done) => {
     request
       .get('/notes')
+      .set('Authorization', `Bearer ${token}`)
       .then((res) => {
         expect(res.body).is.ok;
         done();
@@ -93,6 +130,7 @@ describe('e2e testing the note model', () => {
   it('navigates to /:id and GETs a note by id', (done) => {
     request
       .get(`/notes/${noteTested._id}`)
+      .set('Authorization', `Bearer ${token}`)
       .then((res) => {
         const note = res.body;
         expect(note.data.text).to.deep.equal('test and learn');
@@ -104,6 +142,7 @@ describe('e2e testing the note model', () => {
   it('stashes a note with no tags', (done) => {
     request
       .post('/notes')
+      .set('Authorization', `Bearer ${token}`)
       .send({title: 'empty note test', text: 'not so empty'})
       .then((res) => {
         expect(res.body.data._id).to.be.ok;
@@ -115,6 +154,7 @@ describe('e2e testing the note model', () => {
   it('updates a note in the database', (done) => {
     request
       .put(`/notes/${noteTested._id}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({title: 'modified note for testing', text: 'modified text', tags: ['notes', 'terminal', 'testing']})
       .then((res) => {
         expect(res.body.data.text).to.deep.equal('modified text');
@@ -126,13 +166,18 @@ describe('e2e testing the note model', () => {
   it('deletes a note from the database', (done) => {
     request
       .delete(`/notes/${noteTested._id}`)
+      .set('Authorization', `Bearer ${token}`)
       .then(() => {
-        request
+        return request
           .get(`/notes/${noteTested._id}`)
-          .then((res) => {
-            expect(res.body.data).to.deep.equal(undefined);
+          .set('Authorization', `Bearer ${token}`)
+          .then(() => {
+            done('should not be called');
+          })
+          .catch((err) => {
+            expect(err.response.error.text).to.deep.equal('{"error":"That note does not exist. Perhaps you meant to create a new note?"}');
+            done();
           });
-        done();
       })
       .catch(done);
   });
@@ -140,8 +185,9 @@ describe('e2e testing the note model', () => {
   it('returns the last 5 updated notes', (done) => {
     request
       .get('/notes/last5/notes')
-      .then((data) => {
-        expect(data.length <= 5);
+      .set('Authorization', `Bearer ${token}`)
+      .then((res) => {
+        expect(res.body.data.length <= 5).to.be.ok;
         done();
       })
       .catch(done);
@@ -254,12 +300,15 @@ describe('e2e testing the web article model', () => {
     request
       .delete(`/web-articles/${webTested._id}`)
       .then(() => {
-        request
+        return request
           .get(`/web-articles/${webTested._id}`)
-          .then((res) => {
-            expect(res.body.data).to.deep.equal(undefined);
+          .then(() => {
+            done('not getting called');
+          })
+          .catch((err) => {
+            expect(err.response.error.text).to.equal('{"error":"That web article does not exist. Perhaps you meant to add a new web article?"}');
+            done();
           });
-        done();
       })
       .catch(done);
   });
@@ -284,6 +333,26 @@ describe('e2e testing the tag model', () => {
     }
   });
 
+  const user = {
+    username: 'geseta Testona',
+    password: 'p4$$w04d',
+    roles: ['admin']
+  };
+
+  let tagToken = '';
+
+  it('on sign-up generate a token for tag testing', (done) => {
+    request
+      .post('/auth/signup')
+      .send(user)
+      .then((res) => {
+        tagToken = res.body.token;
+        expect(tagToken).to.be.ok;
+      })
+      //what is this?
+      .then(done, done);
+  });
+
   const tagTested =
     {
       name: 'tag for testing',
@@ -294,6 +363,7 @@ describe('e2e testing the tag model', () => {
   it('returns status=200 on successful requests & at test start, collection is empty', (done) => {
     request
       .get('/tags')
+      .set('Authorization', `Bearer ${tagToken}`)
       .then((res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.deep.equal({ message: 'There are no tags, add some!' });
@@ -307,6 +377,7 @@ describe('e2e testing the tag model', () => {
   it('navigates to POST and stashes a new tag', (done) => {
     request
       .post('/tags')
+      .set('Authorization', `Bearer ${tagToken}`)
       .send(tagTested)
       .then((res) => {
         const tag = res.body;
@@ -321,6 +392,7 @@ describe('e2e testing the tag model', () => {
   it('navigates to the root and GETs all tags', (done) => {
     request
       .get('/tags')
+      .set('Authorization', `Bearer ${tagToken}`)
       .then((res) => {
         expect(res.body[0].heat).to.deep.equal('warm');
         done();
@@ -342,55 +414,49 @@ describe('e2e testing the tag model', () => {
       tagId: tagTested._id
     };
 
-    request
+    const expVal = { 
+      message: 'Your tag has been found',
+      data: {
+        _id: tagTested._id,
+        name: 'tag for testing',
+        description: 'test and learn',
+        heat: 'warm',
+        __v: 0,
+        notes: [testNote],
+        webArticles: [testWebArticle]
+      }
+    };
+
+    const notesPromise = request
       .post('/notes')
+      .set('Authorization', `Bearer ${tagToken}`)
       .send(testNote)
       .then((res) => {
         const note = res.body;
-        expect(note.data._id).to.be.ok;
-        testNote.__v = 0;
+        delete testNote.tagId;
         testNote._id = note.data._id;
-      })
+      });
+
+    const articlesPromise = request
+      .post('/web-articles')
+      .set('Authorization', `Bearer ${tagToken}`)
+      .send(testWebArticle)
+      .then((res) => {
+        const webArticle = res.body;
+        delete testWebArticle.tagId;
+        testWebArticle._id = webArticle.data._id;
+      });
+
+        
+    Promise.all([articlesPromise, notesPromise])
       .then(() => {
-        request
-          .post('/web-articles')
-          .send(testWebArticle)
-          .then((res) => {
-            const webArticle = res.body;
-            expect(webArticle.data._id).to.be.ok;
-            testWebArticle.__v = 0;
-            testWebArticle._id = webArticle.data._id;
-          })
-          .catch(done);
-      })
-      .then(() => {
-        request
+        return request
           .get(`/tags/${tagTested._id}`)
-          .then((res) => {
-            let expVal = { 
-              message: 'Your tag has been found',
-              data: {
-                _id: tagTested._id,
-                name: 'tag for testing',
-                description: 'test and learn',
-                heat: 'warm',
-                __v: 0,
-                notes: [{
-                  '_id': testNote._id,
-                  'text': 'the test note text',
-                  'title': 'test note to show population'
-                }],
-                webArticles: [{
-                  '_id': testWebArticle._id,
-                  'description': 'a test description',
-                  'title': 'test article to show population',
-                  'url': 'http:www.test.this'}
-                ]}
-            };
-            expect(expVal).to.deep.equal(res.body);
-            done();
-          })
-          .catch(done);
+          .set('Authorization', `Bearer ${tagToken}`);
+      })
+      .then((res) => {
+        expect(res.body).to.deep.equal(expVal);
+        done();
       })
       .catch(done);
   });
@@ -398,6 +464,7 @@ describe('e2e testing the tag model', () => {
   it('stashes a tag with no heat', (done) => {
     request
       .post('/tags')
+      .set('Authorization', `Bearer ${tagToken}`)
       .send({name: 'empty tag test', description: 'just for testing', heat: ''})
       .then((res) => {
         expect(res.body.data).to.be.ok;
@@ -410,6 +477,7 @@ describe('e2e testing the tag model', () => {
   it('updates a tag in the database', (done) => {
     request
       .put(`/tags/${tagTested._id}`)
+      .set('Authorization', `Bearer ${tagToken}`)
       .send({name: 'modified tag for testing', description: 'modified tag text', heat: 'warm'})
       .then((res) => {
         expect(res.body.data.description).to.deep.equal('modified tag text');
@@ -421,6 +489,7 @@ describe('e2e testing the tag model', () => {
   it('finds tags with a heat valued warm', (done) => {
     request
     .get('/tags/search/heat/warm')
+    .set('Authorization', `Bearer ${tagToken}`)
     .then((res) => {
       expect(res.body.data[0].heat).to.include('warm');
       done();
@@ -431,13 +500,18 @@ describe('e2e testing the tag model', () => {
   it('deletes a tag from the database', (done) => {
     request
       .delete(`/tags/${tagTested._id}`)
+      .set('Authorization', `Bearer ${tagToken}`)
       .then(() => {
-        request
+        return request
           .get(`/tags/${tagTested._id}`)
-          .then((res) => {
-            expect(res.body.data).to.deep.equal(undefined);
+          .set('Authorization', `Bearer ${tagToken}`)
+          .then(() => {
+            done('not getting called');
+          })
+          .catch((err) => {
+            expect(err.response.error.text).to.equal('{"error":"That tag does not exist. Perhaps you meant to create a new tag?"}');
+            done();
           });
-        done();
       })
       .catch(done);
   });

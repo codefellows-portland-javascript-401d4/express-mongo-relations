@@ -4,6 +4,24 @@ All changes to this project will be documented in this CHANGELOG
 Format based on Keep a Changelog (http://keepachangelog.com/)
 and project adheres to Semantic Versioning (http://semver.org).
 
+## [2.0.0] - 2016-11-08
+### Changed
+- new authenicate/authorize system
+- refactored tests
+- API access more restricted
+- merged index.js into server.js
+
+### Added
+- auth directory w/ files:
+  - ensure-auth.js - checks user authentication
+  - ensure-role.js - checks user authorization
+  - token.js - signing up and verifying tokens
+  - user.js - user model
+  - auth.js - routes for authentication and authorization
+- more tests
+
+
+
 ## [1.1.0] - 2016-11-08
 ### Changed
 - refactor how notes and web-articles acquire their tags
