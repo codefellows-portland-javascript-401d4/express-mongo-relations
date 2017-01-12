@@ -6,9 +6,9 @@
     "test": "test"
   },
   "scripts": {
-    "start": "npm run test && env $(cat .env) nodemon server.js",
-    "test": "env $(cat .env) mocha",
-    "test:watch": "MONGODB_URI=mongodb://localhost/football nodemon --exec mocha"
+    "start": "nodemon server.js",
+    "test": "mocha",
+    "test:watch": "mocha -w"
   },
   "devDependencies": {
     "chai": "^3.5.0",

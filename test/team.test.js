@@ -4,7 +4,7 @@ const assert = require('chai').assert;
 describe('Team model', () => {
     it('validate team name', done => {
         const team = new Team ({
-            name: 'name'
+            teamName: 'teamName'
         });
 
         team.validate(err => {
@@ -25,7 +25,7 @@ describe('Team model', () => {
 
     it('wins have to be a number', done => {
         const team = new Team();
-        team.wins = null;
+        wins = "five";
 
         team.validate(err => {
             assert.isOk(err, 'expected error: data type should be number');

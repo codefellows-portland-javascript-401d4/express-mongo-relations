@@ -2,7 +2,7 @@ const Coach = require('../lib/models/coach');
 const assert = require('chai').assert;
 
 describe('Coach model', () => {
-    it('validate coach name', done => {
+    it('validates coach name', done => {
         const coach = new Coach ({
             coachName: 'coachName'
         });

@@ -5,7 +5,7 @@ chai.use(chaiHttp);
 
 const connection = require( '../lib/setup-mongoose');
 
-const app = require( '../app' );
+const app = require( '../lib/app' );
 
 describe( 'team', () => {
     before( done => {
@@ -27,7 +27,7 @@ describe( 'team', () => {
     const request = chai.request(app);
 
     const seahawks = {
-        name: 'Seahawks'
+        teamName: 'Seattle Seahawks'
     };
 
     it( 'GET all', done => {
@@ -47,8 +47,10 @@ describe( 'team', () => {
             .then( res => {
                 const team = res.body;
                 assert.ok( team._id);
+                seahawks.teamName = team.teamName;
                 seahawks.__v = 0;
                 seahawks._id = team._id;
+                seahawks.coachId = [];
                 done();
             })
             .catch( done );
@@ -63,5 +65,6 @@ describe( 'team', () => {
                 done();
             })
             .catch( done );
-    });
+    });  
+
 });

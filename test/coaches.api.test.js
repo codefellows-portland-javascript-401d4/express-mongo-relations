@@ -5,7 +5,7 @@ chai.use(chaiHttp);
 
 const connection = require( '../lib/setup-mongoose');
 
-const app = require( '../app' );
+const app = require( '../lib/app' );
 
 describe( 'coach', () => {
     before( done => {
