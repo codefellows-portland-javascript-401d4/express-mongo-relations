@@ -1,0 +1,27 @@
+{
+  "name": "express-mongo-relations",
+  "version": "1.0.0",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "npm run test && env $(cat .env) nodemon server.js",
+    "test": "env $(cat .env) mocha",
+    "test:watch": "MONGODB_URI=mongodb://localhost/football nodemon --exec mocha"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.9.1",
+    "mocha": "^3.1.2"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.3.0",
+    "body-parser": "^1.15.2",
+    "debug": "^2.2.0",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
+    "mongoose": "^4.6.6"
+  }
+}
