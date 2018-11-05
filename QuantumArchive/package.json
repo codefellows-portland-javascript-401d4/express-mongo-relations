@@ -1,0 +1,36 @@
+{
+  "name": "express-mongo-relations",
+  "version": "1.0.0",
+  "description": "Relationship database with mongo/Mongoose/express/node",
+  "main": "server.js",
+  "scripts": {
+    "pretest": "eslint .",
+    "test": "mocha",
+    "test:watch": "mocha -w",
+    "start": "eslint . && mocha && node server.js",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Waxhoya/express-mongo-relations.git"
+  },
+  "author": "Chris B and Albert R",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Waxhoya/express-mongo-relations/issues"
+  },
+  "homepage": "https://github.com/Waxhoya/express-mongo-relations#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.9.1",
+    "mocha": "^3.1.2",
+    "morgan": "^1.7.0",
+    "nodemon": "^1.11.0"
+  }
+}
